@@ -4,10 +4,18 @@
  * @Author: wangjie
  * @Date: 2021-09-10 14:30:17
  * @LastEditors: wangjie
- * @LastEditTime: 2021-09-29 15:30:34
+ * @LastEditTime: 2021-10-23 10:09:42
 -->
 
 # vue3-webpack
+
+# 渲染函数
+
+## h 渲染组件
+
+1. 局部组件，import comp from '' h(comp) --> refrence h(App)
+1. 全局组件 resolveComponent(compName)
+1. 动态组件（:is） resolveDynamicComponent
 
 ## 前端规范之 code style 代码格式化
 
@@ -59,8 +67,8 @@ indent_style = tab
 4. eslint-config-prettier 跟已存在的插件有冲突使用，能够关闭一些不必要的或者是与 prettier 冲突的 lint 选项，需要确保这个配置在 extends 的最后一项。
 5. 简化配置：extends: ["plugin: prettier/recommended"]
 
+## pc 端页面展示风格
 
-## pc端页面展示风格
 1. 菜单栏不动，右侧内容页面主体随内容长度变动
 2. 菜单栏 与页面主体保持一致滚动（页面过长）
    ```
@@ -73,9 +81,12 @@ indent_style = tab
 
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
-## vue3 ts eslint prettier 
+## vue3 ts eslint prettier
+
 > TypeError: Cannot read property 'parseComponent' of undefined
+
 1. [base vue3 ts eslint prettier](https://juejin.cn/post/6980276106716774407)
+
 ```
 vue.config.js
 // config.module
@@ -89,4 +100,5 @@ vue.config.js
 //   })
 //   .end()
 ```
+
 2. [jsx]
