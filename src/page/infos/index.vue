@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-09-26 17:03:53
  * @LastEditors: wangjie
- * @LastEditTime: 2021-10-23 10:58:35
+ * @LastEditTime: 2021-10-23 16:42:20
 -->
 <!-- <template>
   <div>
@@ -65,10 +65,36 @@ export default defineComponent({
 </script> -->
 <template>
 <!-- <HelloWorld/> -->
+<div :style="{ display: 'flex', width: '100%'}">
+  <div v-for="(item, index) in searchForm" :key="item.value" :style="{ display: 'flex', width: '300px'}">
+    <n-select
+      v-model:value="searchForm[index].value"
+      @update:value="(value, option) => handleSelect(index, value, option)"
+      @clear="() => handleSelectClear(index)"
+      filterable
+      clearable
+      tag
+      placeholder=""
+      :options="options"
+    />
+    <n-select
+      v-show="searchForm[index]?.condition"
+      v-model:value="searchForm[index].field1"
+      filterable
+      placeholder=""
+      :options="options"
+    />
+    <n-input v-model:value="searchForm[index].field2"  type="text" placeholder="基本的 Input" />
+    <div class="delete-icon" @click="() => pureCondition(index)">X</div>
+  </div>
+</div>
+<n-button @click="addSearchCondition">Default</n-button>
+
   <n-data-table :columns="columns" :data="data" :pagination="pagination" />
 </template>
 
 <script lang="ts">
+// import { computed } from 'vue'
 import HelloWorld from '@/components/HelloWorld.vue'
 import {
   h,
@@ -77,11 +103,12 @@ import {
   ref,
   resolveComponent,
   watch,
-  watchEffect
+  watchEffect,
+  computed
 } from 'vue'
 import { NTag, NButton  } from 'naive-ui'
 
-// import Columns from './index.js'
+import { useColumns } from './index'
 const COLUMNS = [
   {
     title: 'name',
@@ -90,6 +117,7 @@ const COLUMNS = [
     isSearch: false,
     isDel: false,
     isModify: false,
+    isOver: false,
     modifyEl: 'span'
   },
   {
@@ -99,6 +127,7 @@ const COLUMNS = [
     isSearch: false,
     isDel: false,
     isModify: false,
+    isOver: false,
     modifyEl: 'span'
   }
 ]
@@ -129,185 +158,71 @@ const createData = () => [
 
 export default defineComponent({
   setup () {
-    let inputValue = ref<any>('')
-    let columns = ref<any>(COLUMNS)
-    let val = ref<string>('123')
-    // functions
-    function renderImgIcon({src, onClick, style={ width: '15px', height: '15px' }}){
-      return h('img', {
-            src, //: require(url),
-            style,
-            onClick(e) {
-              console.log(inputValue.value, 'click event', e)
-              // inputValue.value = false
-              onClick()
-            }
-          })
-    }
+    let searchForm = ref<any>([{field1:'',field2: '', value: ''}])
+    let searchList = ref<any>([{field1:'',field2: ''}])
 
-    function makeColumns(columns) {
-      console.log(columns[0], 'makeColumns', columns)
-      return columns.map(column => {
-        column.title = renderTitle
-        return column
-      })
+    let {columns} = useColumns(COLUMNS)
+    let clearSelectLabel = ref<string>('')
+    let selectItem = {
+      field: 'value'// contain less than greater than
     }
-    function renderTitleTextEl(column) {
-      if(column.isModify) {
-        return h(resolveComponent('n-input'), {
-          type: 'text',
-          style: {
-            width: '100px',
-            height: '100%'
-          },
-          clearable: true,
-          onBlur(e){
-            column.isModify = false
-            console.log('onBlur.value = e',column)
-          },
-          value: column.titleText,
-          "onUpdate:value"(value) {
-            column.titleText = value
-            console.log(column.titleText, 'onUpdate:value', column.titleText)
-            // instance.ctx.$emit('onUpdate:value', e?.value)
-          }
-        })
-      } else {
-        return h('span', {
-          onClick() {
-            column.isModify = true
-          }
-        }, column.titleText)
+    let selectFields = [
+
+    ]
+    let options = ref<any>([
+      { label: '各类编号', value: 'code', placeholder: '请选择筛选类型', field1: '', field2: ''},
+      { label: '结算单位', value: 'unit', placeholder: '请选择筛选类型', condition: true, field1: '', field2: ''},
+      { label: '币种', value: 'current', placeholder: '请选择筛选类型', field1: '', field2: ''}
+    ])
+    // computed
+    const getKey = computed(() => {
+      return function(o) {
+        return `id_${o}`
+      }
+    })
+    // function
+    function handleSelect(index, value, option) {
+      console.log(searchForm.value, 'select',value, option)
+      if(value) {
+        let selected = searchForm.value[index]
+        if(selected) {
+          selected.disabled = selected.label === option.label
+        }
+        option.disabled = true
+        searchForm.value[index] = option
       }
     }
-    function renderTitle(column) {
-      console.log('renderTitle', column)
-      // const instance = getCurrentInstance() as any
-      const titleEl = column.modifyEl
-      if(!column.isSearch) {
-        return h('div', {
-              style: {
-                display: 'flex',
-                'justify-content': 'space-between'
-              }
-              }, [
-                renderTitleTextEl(column),
-                renderImgIcon({
-                  src: require('../../assets/search.png'),
-                  onClick() {
-                    console.log('isSearch === true',column)
-                    column.isSearch = true
-                  }
-                }),
-                renderImgIcon({
-                  src: require('../../assets/delete_fill.png'),
-                  onClick(){
-                    console.log('isDel === true',column)
-                    column.isDel = true
-                  }
-                }),
-              ])
-      } else {
-      return h('div', {
-                style: {
-                  display: 'flex',
-                  'justify-content': 'space-between'
-                }
-              }, [
-                // h(HelloWorld, {
-                //   style: {
-                //     width: '100px',
-
-                //   }
-                  // type: 'text',
-                  // onChange(e) {
-                  //   inputValue.value = !!e.target.value
-                  //   console.log(e.target.value,'native element change event', arguments)
-                  // },
-                  // modelValue: val.value,
-                  // 'onUpdate:modelValue': value => {
-                  //   val.value = value
-                  //   console.log('usage on native element', value)
-                  // }
-                // }),
-                h(resolveComponent('n-input'), {
-                  type: 'text',
-                  style: {
-                    width: '100%',
-                    height: '100%'
-                  },
-                  clearable: true,
-                  onBlur(e){
-                    column.isSearch = false
-                    console.log('onBlur.value = e',column)
-                  },
-                  value: column.titleText,
-                  "onUpdate:value"(value) {
-                    column.titleText = value
-                    console.log(column.titleText, 'onUpdate:value', column.titleText)
-                    // instance.ctx.$emit('onUpdate:value', e?.value)
-                  }
-                })
-              ])
-      }
+    function handleSelectClear(index) {
+      let option = searchForm.value[index]
+      option.disabled = false
+      searchForm.value.splice(index, 1)
+      console.log('handleSelectClear', index)
     }
-    // function createColumns() { // { sendMail }
-    //   return [
-    //     {
-    //       title: renderTitle,
-    //       key: 'name',
-    //       align: 'center',
-    //     },
-    //     {
-    //       title: 'Tags',
-    //       key: 'tags',
-    //       render (row) {
-    //         const tags = row.tags.map((tagKey) => {
-    //           return h(
-    //             NTag,
-    //             {
-    //               style: {
-    //                 marginRight: '6px'
-    //               },
-    //               type: 'info',
-    //               onClick() {
-    //                 console.log("inputValue.value", inputValue.value)
-    //                 inputValue.value = true
-    //               }
-    //             },
-    //             {
-    //               default: () => tagKey
-    //             }
-    //           )
-    //         })
-    //         return tags
-    //       }
-    //     },
-    //     {
-    //       title: 'Action',
-    //       key: 'actions',
-    //       render (row) {
-    //         return h(
-    //           NButton,
-    //           {
-    //             size: 'small'
-    //             // onClick: () => sendMail(row)
-    //           },
-    //           { default: () => 'Send Email' }
-    //         )
-    //       }
-    //     }
-    //   ]
-    // }
-    // watchEffect(() => {
-    //   columns = makeColumns(columns.value)
-    //   console.log(columns,'watchEffect  columns')
-    //   return inputValue.value
-    // })
-    columns = makeColumns(columns.value)
+
+    function makeSearchParams() {
+
+    }
+    function pureCondition(index) {
+      let item = searchForm.value.splice(index, 1)
+      item[0].disabled = false
+    }
+    function addSearchCondition(){
+      let param = { field1: '', field2: '', value: ''}
+      searchList.value.push(param)
+      searchForm.value.push(param)
+    }
+
     return {
       data: createData(),
-      columns: columns,
+      columns,
+      searchForm,
+      handleSelect,
+      handleSelectClear,
+      searchList,
+      getKey,
+      addSearchCondition,
+      pureCondition,
+      options,
       // createColumns({
       //   sendMail (rowData) {
       //     console.info('send mail to ' + rowData.name)
