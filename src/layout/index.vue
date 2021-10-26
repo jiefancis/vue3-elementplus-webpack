@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-09-10 15:30:42
  * @LastEditors: wangjie
- * @LastEditTime: 2021-09-29 18:30:14
+ * @LastEditTime: 2021-10-26 17:05:48
 -->
 <template>
   <div class="layout-wrapper">
@@ -14,18 +14,26 @@
       <side-menu :isCollapse="state.isCollapse" />
       <el-scrollbar class="container">
         <tags-view />
+        <div id="microAppContainer"></div>
         <router-view />
       </el-scrollbar>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
-import { reactive } from 'vue'
+import { reactive , computed} from 'vue'
 import TagsView from './components/tagsView/index.vue'
 import Sidebar from './components/sidebar.vue'
 import SideMenu from './components/sideMenu.vue'
 import NavBar from './components/navBar/index.vue'
+import { useRoute } from 'vue-router'
 
+const route = useRoute()
+console.log('routerrouterrouterrouterrouterrouterrouterrouterrouterrouterrouter', route)
+const hasMicroMount = computed(() => route.fullPath.startsWith('/vue3/page_pollingSign'))
+// function invokeRoute(location) {
+//   return () => location.pathname.startsWith('/web-ssdd/page_pollingSign')
+// }
 interface State {
   isCollapse: boolean
 }

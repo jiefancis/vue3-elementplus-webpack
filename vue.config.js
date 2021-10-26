@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-09-17 17:06:14
  * @LastEditors: wangjie
- * @LastEditTime: 2021-10-11 16:30:57
+ * @LastEditTime: 2021-10-26 18:42:41
  */
 'use strict'
 const path = require('path')
@@ -18,6 +18,29 @@ const name = '鸿亚润达WMS系统' // 标题
 // const port = 8231 // 端口
 
 module.exports = {
+  // publicPath: '',
+  // pages: {
+  //   index: {
+  //     template: 'public/index.html',
+  //     entry: 'src/main.ts',
+  //     filename: 'index.html',
+  //     title: 'index page',
+  //     keywords: 'indexindexindex',
+  //     description: 'index page multi page'
+  //   },
+  //   one: {
+  //     template: 'public/index.html',
+  //     entry: 'src/nested/one.ts',
+  //     filename: 'one.html',
+  //     title: 'one page',
+  //     keywords: 'oneoneone',
+  //     description: 'one page multi page'
+  //   }
+  // },
+  pages: {
+    one: 'src/nested/one.ts',
+    index: 'src/main.ts'
+  },
   // publicPath: process.env.NODE_ENV === 'production' ? '/' : '/',
   // outputDir: 'enterprise',
   // outputDir: `dist-${process.env.NODE_ENV}`,

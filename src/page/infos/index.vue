@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-09-26 17:03:53
  * @LastEditors: wangjie
- * @LastEditTime: 2021-10-23 16:42:20
+ * @LastEditTime: 2021-10-26 17:06:10
 -->
 <!-- <template>
   <div>
@@ -64,8 +64,9 @@ export default defineComponent({
 
 </script> -->
 <template>
+  <!-- <div id="microAppContainer"/> -->
 <!-- <HelloWorld/> -->
-<div :style="{ display: 'flex', width: '100%'}">
+<!-- <div :style="{ display: 'flex', width: '100%'}">
   <div v-for="(item, index) in searchForm" :key="item.value" :style="{ display: 'flex', width: '300px'}">
     <n-select
       v-model:value="searchForm[index].value"
@@ -90,7 +91,7 @@ export default defineComponent({
 </div>
 <n-button @click="addSearchCondition">Default</n-button>
 
-  <n-data-table :columns="columns" :data="data" :pagination="pagination" />
+  <n-data-table :columns="columns" :data="data" :pagination="pagination" /> -->
 </template>
 
 <script lang="ts">
@@ -104,6 +105,7 @@ import {
   resolveComponent,
   watch,
   watchEffect,
+  PropType,
   computed
 } from 'vue'
 import { NTag, NButton  } from 'naive-ui'
@@ -155,6 +157,13 @@ const createData = () => [
     tags: ['cool', 'teacher']
   }
 ]
+
+// ts
+interface Props {
+  a: 1
+  b: 2
+}
+
 
 export default defineComponent({
   setup () {

@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-09-26 14:39:34
  * @LastEditors: wangjie
- * @LastEditTime: 2021-10-26 21:03:22
+ * @LastEditTime: 2021-10-26 14:51:21
  style=" height: 500px;"
         class="ag-theme-alpine"
         rowSelection="multiple"
@@ -35,7 +35,6 @@
     style="width: 100vw; height: 60vh;"
     class="ag-theme-alpine"
     id="myGrid"
-    @grid-ready="onGridReady"
     :columnDefs="columnDefs"
     :defaultColDef="defaultColDef"
     :rowData="rowData"
@@ -51,6 +50,11 @@ import { withDefaults, defineProps, ref, onMounted, resolveComponent } from 'vue
 import HelloWorld from '@/components/HelloWorld.vue'
 import TableHeaderColumn from './tableHeaderColumn.vue'
 
+// lifecycle
+// onMounted(() => {
+let gridApi = null
+let gridColumnApi = null
+// let rowData = null
 let frameworkComponents = { agColumnHeader: TableHeaderColumn };
 let defaultColDef = ref<Record<string, any>>({
   editable: true,
@@ -61,8 +65,21 @@ let defaultColDef = ref<Record<string, any>>({
   resizable: true,
   headerComponentParams: { menuIcon: 'fa-bars' },
 })
+function onGridReady(params) {
+  gridApi = params.api;
+  gridColumnApi = params.columnApi;
+
+  const updateData = (data) => {
+    // rowData = data;
+  };
+
+  fetch('https://www.ag-grid.com/example-assets/olympic-winners.json')
+    .then((resp) => resp.json())
+    .then((data) => updateData(data));
+}
 // })
 // data
+var customHeaders = ref<any>([{}])
 var myIcons = {
   sortAscending: function () {
     return 'ASC';
@@ -71,10 +88,9 @@ var myIcons = {
     return 'DESC';
   },
 };
-const columnDefs = ref<any>([
+const columnDefs = [
   {
     headerName: "Athlete", field: "athlete",
-    // headerComponent: TableHeaderColumn,
     headerComponentParams:  {
       customHeader: {
         id: 1,
@@ -84,7 +100,6 @@ const columnDefs = ref<any>([
     }
   },
   { headerName: "Sport", field: "sport",
-    // headerComponent: TableHeaderColumn,
     headerComponentParams:  {
       customHeader:
         {
@@ -101,6 +116,7 @@ const columnDefs = ref<any>([
     // headerName: "Age",
     field: "age",
     // headerComponent: TableHeaderColumn,
+    // headerGroupComponentFramework: TableHeaderColumn,
     headerComponentParams:  {
       customHeader: {
         id: 3,
@@ -108,8 +124,77 @@ const columnDefs = ref<any>([
         headerName: 'custom3'
       }
     }
-  }
-])
+  },
+
+  // you can also specify header components for groups
+  // {
+  //   headerName: "Medals",
+  //   headerGroupComponent: 'myHeaderGroupComponent',
+  //   children: [
+  //     {headerName: "Gold", field: "gold"},
+  //     {headerName: "Silver", field: "silver"},
+  //     {headerName: "Gold", field: "bronze"}
+  //   ]
+  // }
+]
+// const columnDefs = ref<any>([
+//         // { headerName: "Make", field: "make" },
+//         // { headerName: "Model", field: "model" },
+//         // { headerName: "Price", field: "price" },
+//         // {
+//         //     headerName: 'Static Styles',
+//         //     field: 'static',
+//         //     cellStyle: {color: 'red', 'background-color': 'green'}
+//         // },
+//         // different styles for each row
+//         // {
+//         //     headerName: 'Dynamic Styles',
+//         //     field: 'dynamic',
+//         //     cellStyle: params => {
+//         //         if (params.value === 'Police') {
+//         //             //mark police cells as red
+//         //             return {color: 'red', backgroundColor: 'green'};
+//         //         }
+//         //         return null;
+//         //     }
+//         // }
+//         { field: 'athlete', rowGroup: true, hide: true },
+//         {
+//           field: 'language',
+//           cellEditor: 'agLargeTextCellEditor',
+//           cellEditorParams: {
+//             values: ['English', 'Spanish', 'French', 'Portuguese', '(other)'],
+//           },
+//         },
+//         {
+//           field: 'gold',
+//           headerComponentParams: { menuIcon: 'fa-cog' },
+//           headerGroupComponent: 'n-input',
+//           minWidth: 120,
+//         },
+//         {
+//           field: 'age',
+//           width: 90,
+//           enableValue: true,
+//           icons: { sortAscending: 'U', sortDescending: 'D' },
+//         },
+//         {
+//           field: 'country',
+//           width: 150,
+//           rowGroupIndex: 0,
+//           icons: {
+//             sortAscending: '<i class="fa fa-sort-alpha-up"/>',
+//             sortDescending: '<i class="fa fa-sort-alpha-down"/>',
+//           },
+//         },
+//         // { field: 'year', width: 90, enableRowGroup: true },
+//         // { field: 'date' },
+//         // { field: 'sport', width: 110, icons: myIcons },
+//         // { field: 'gold', width: 100 },
+//         // { field: 'silver', width: 100 },
+//         // { field: 'bronze', width: 100 },
+//         // { field: 'total', width: 100 },
+//       ])
 const rowData = ref<any>([
   { make: "Toyota", model: "Celica", price: 35000 },
   { make: "Ford", model: "Mondeo", price: 32000 },
@@ -173,9 +258,6 @@ const props = withDefaults(defineProps<Props>(), {
 })
 props.o.b = { b: 2 }
 
-function onGridReady(params) {
-  console.log('onGridReadyonGridReady', arguments)
-}
 </script>
 
 <style lang="scss" scoped>

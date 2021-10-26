@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-09-10 14:30:17
  * @LastEditors: wangjie
- * @LastEditTime: 2021-10-23 10:09:42
+ * @LastEditTime: 2021-10-25 10:55:17
 -->
 
 # vue3-webpack
@@ -16,6 +16,25 @@
 1. 局部组件，import comp from '' h(comp) --> refrence h(App)
 1. 全局组件 resolveComponent(compName)
 1. 动态组件（:is） resolveDynamicComponent
+
+# ts
+
+1. withDefaults defineProps
+
+```
+interface oo {
+  a?: string | number
+  b: any
+}
+interface Props {
+  o: Record<string, oo>
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  o: () => ({c: {b:1}})
+})
+props.o.b = {b:2}
+```
 
 ## 前端规范之 code style 代码格式化
 
