@@ -4,17 +4,13 @@
  * @Author: wangjie
  * @Date: 2021-08-18 18:26:58
  * @LastEditors: wangjie
- * @LastEditTime: 2021-10-27 09:06:42
+ * @LastEditTime: 2021-10-23 18:07:40
 -->
 <template>
-<router-view v-slot="{ Component }">
-  <transition>
-    <keep-alive>
-      <component :is="Component" />
-    </keep-alive>
-  </transition>
-</router-view>
-  <!-- <router-view /> -->
+  <div id="app" @click="toPage">
+    one page
+    <router-view></router-view>
+  </div>
 </template>
 
 <script lang="ts">
@@ -24,9 +20,9 @@ import { useRouter } from 'vue-router'
 export default defineComponent({
   setup() {
     const router = useRouter()
-    // setTimeout(() => {
-    //   router.push('page_pollingSign_reportDetail_reportDetail')
-    // },10000)
+    return {
+      toPage: () => router.push('/infos')
+    }
   //   axios({
   //     method: 'get',
   //     url: 'http://127.0.0.2:7002/'

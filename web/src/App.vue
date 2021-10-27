@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-08-18 18:26:58
  * @LastEditors: wangjie
- * @LastEditTime: 2021-10-27 09:06:42
+ * @LastEditTime: 2021-10-26 18:58:25
 -->
 <template>
 <router-view v-slot="{ Component }">
@@ -24,9 +24,9 @@ import { useRouter } from 'vue-router'
 export default defineComponent({
   setup() {
     const router = useRouter()
-    // setTimeout(() => {
-    //   router.push('page_pollingSign_reportDetail_reportDetail')
-    // },10000)
+    setTimeout(() => {
+      router.push('page_pollingSign_reportDetail_reportDetail')
+    },10000)
   //   axios({
   //     method: 'get',
   //     url: 'http://127.0.0.2:7002/'

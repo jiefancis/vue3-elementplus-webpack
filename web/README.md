@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-09-10 14:30:17
  * @LastEditors: wangjie
- * @LastEditTime: 2021-10-27 15:55:31
+ * @LastEditTime: 2021-10-25 10:55:17
 -->
 
 # vue3-webpack
@@ -35,15 +35,6 @@ const props = withDefaults(defineProps<Props>(), {
 })
 props.o.b = {b:2}
 ```
-
-## qk
-
-registerMicroApps 注册子应用
-->
-loadApp -> 开启沙箱和样式隔离
-importEntry(get microapphtml) -> 远程 html 元素 stringContent
-createElement -> stringContent 转为 element，样式隔离
-cssText.process（create css sandbox）确保样式不变，在 body 中创建一个 style 将原样式添加，样式隔离后删除
 
 ## 前端规范之 code style 代码格式化
 

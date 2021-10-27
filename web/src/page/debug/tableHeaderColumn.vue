@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-10-26 11:54:02
  * @LastEditors: wangjie
- * @LastEditTime: 2021-10-27 11:28:57
+ * @LastEditTime: 2021-10-26 16:04:00
  !!props.columns.isSearch
 -->
 <template>
@@ -12,11 +12,11 @@
     @mouseenter.stop.prevent="onmouseenter"
     @mouseleave.stop.prevent="onmouseleave"
     >
-    <n-input />
-    <div class="content">
+    <n-input v-if="!!customHeader.isSearch"/>
+    <div class="content" v-else>
       <span>标题</span>
-      <span>search</span>
-      <span>icon</span>
+      <span v-show="customHeader.isEnter">search</span>
+      <span v-show="customHeader.isEnter">icon</span>
       {{customHeader}}
     </div>
   </div>
@@ -42,11 +42,11 @@ interface Props{
 type proptype = Record<string, any>
 const _props: any = defineProps()
 // const injectProps = ref<any>(_props)
-console.log('injectPropsinjectPropsinjectProps', _props)
+console.log('injectPropsinjectPropsinjectProps', _props.params.customHeader)
 
-// const props = ref<Props>({columns: {
-//   // isSearch: false
-// }})
+const props = ref<Props>({columns: {
+  isSearch: false
+}})
 
 const customHeader = reactive(_props.params.customHeader)
 function onmouseenter(){
@@ -57,12 +57,12 @@ function onmouseleave(){
 }
 
 
-// watch(
-//   () => customHeader.isSearch,
-//   (newVal, oldVal) => {
-//     console.log('watch -- customHeader', newVal, oldVal)
-//   }
-// )
+watch(
+  () => customHeader.isSearch,
+  (newVal, oldVal) => {
+    console.log('watch -- customHeader', newVal, oldVal)
+  }
+)
 function toggleColumn() {
   console.log('toggleColumn', _props)
   customHeader.isSearch = !customHeader.isSearch
