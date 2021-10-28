@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-08-18 18:26:58
  * @LastEditors: wangjie
- * @LastEditTime: 2021-10-27 09:06:42
+ * @LastEditTime: 2021-10-28 15:28:53
 -->
 <template>
 <router-view v-slot="{ Component }">
@@ -23,7 +23,9 @@ import { defineComponent } from 'vue'
 import { useRouter } from 'vue-router'
 export default defineComponent({
   setup() {
+    (window as any).appppppppppppppppppppp2 = 'appp2'
     const router = useRouter()
+
     // setTimeout(() => {
     //   router.push('page_pollingSign_reportDetail_reportDetail')
     // },10000)

@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-09-09 16:24:11
  * @LastEditors: wangjie
- * @LastEditTime: 2021-10-25 11:45:57
+ * @LastEditTime: 2021-10-28 17:35:43
 -->
 <template>
   <div>
@@ -49,6 +49,12 @@ import {
   defineProps
 } from 'vue'
 
+interface State{
+  tableData: Array<Record<string, any>>,
+  fieldList: Array<Record<string, any>>,
+  handler: Array<Record<string, any>>
+}
+
 export default defineComponent({
   // props: {
   //   tableData: {
@@ -83,7 +89,7 @@ export default defineComponent({
   emits: ['dispatchEvent'],
   setup (props, context) {
     console.log('table components', props, context)
-    const state = reactive({
+    const state = reactive<State>({
       tableData: [
         {
           date: '2016-05-02',

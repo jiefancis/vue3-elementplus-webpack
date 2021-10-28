@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-08-18 18:26:58
  * @LastEditors: wangjie
- * @LastEditTime: 2021-10-27 11:04:40
+ * @LastEditTime: 2021-10-28 18:48:48
  */
 import { createApp } from 'vue'
 import App from './App.vue'
@@ -35,7 +35,15 @@ app.use(store)
 app.use(naive)
 app.mount('#app')
 
-
+// function autoConfig() {
+//   const context: any = require.context('@/page/uiEngine', true, /\.vue$/)
+//   console.log('contextcontextcontext', context, context.keys())
+//   const components: Record<string, any> = {}
+//   context.keys().forEach(function(key) {
+//     console.log('keykeykey', key)
+//   })
+// }
+// autoConfig()
 
 new Promise((resolve, reject) => {
   function invokeRoute(location) {
@@ -48,6 +56,12 @@ new Promise((resolve, reject) => {
       entry: 'http://localhost:8080/', // const loadEntry = process.env.NODE_ENV === 'production' ? 'http://192.168.10.252:8098/polling-sign/' : '//localhost:8080'
       container: '#microAppContainer',
       activeRule: invokeRoute(window.location)
+    },
+    {
+      name: '微应用test',
+      entry: 'http://localhost:8081/',
+      container: '#microApp',
+      activeRule: '/vue3/micropage/'
     }
   ])
   // 启动 qiankun

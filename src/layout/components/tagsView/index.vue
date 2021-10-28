@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-09-26 11:40:39
  * @LastEditors: wangjie
- * @LastEditTime: 2021-09-26 16:38:11
+ * @LastEditTime: 2021-10-28 14:01:49
 -->
 <template>
   <div class="tags-view">
@@ -42,8 +42,8 @@ interface TagList {
 const tagList = ref<Array<TagList>>([
   { title: '首页', path: '/', query: { id: 1 } },
   { title: 'add', path: '/add' },
-  { title: 'reduce', path: '/reduce' },
-  { title: 'debug', path: '/debug' }
+  { title: 'app1', path: '/page_pollingSign_reportDetail_reportDetail' },
+  { title: 'app2', path: '/micropage/page_pollingSign_reportDetail_reportDetail' }
   // { title: '首页', path: '/home' },
   // { title: '401', path: '/401' },
   // { title: '标签二', path: '/reduce' },

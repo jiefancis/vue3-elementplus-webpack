@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-09-10 15:30:42
  * @LastEditors: wangjie
- * @LastEditTime: 2021-10-26 17:05:48
+ * @LastEditTime: 2021-10-28 18:44:25
 -->
 <template>
   <div class="layout-wrapper">
@@ -14,7 +14,7 @@
       <side-menu :isCollapse="state.isCollapse" />
       <el-scrollbar class="container">
         <tags-view />
-        <div id="microAppContainer"></div>
+        <!-- <div id="microAppContainer"></div> -->
         <router-view />
       </el-scrollbar>
     </div>

@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-10-27 16:56:19
  * @LastEditors: wangjie
- * @LastEditTime: 2021-10-27 17:36:00
+ * @LastEditTime: 2021-10-28 16:28:02
  */
 class snapshotSandbox{
   constructor() {
@@ -42,6 +42,18 @@ class snapshotSandbox{
 }
 
 
+// proxy window action to fakewindow?
+/**
+ * loadApps -> createSandboxContainer创建沙箱 -> importHtmlEntry.execScripts(sandbox.proxy) -> eval(with(window).bind(proxy))
+ *
+ * import-html-entry包
+ * 前端项目打包完后，import-html-entry获取到前端项目的js，并通过
+ * `;(function(window, self, globalThis){with(window){;${scriptText}\n${sourceUrl}}}).bind(window.proxy)(window.proxy, window.proxy, window.proxy);`
+ *
+ * (function(window, self, globalThis) 处理window.property情况
+ * with(window) 处理 property的场景
+ * 方式，讲代码中所有的js运行在proxy环境下
+ */
 class proxySandbox{
   constructor() {
     this.fakeWindow = {}
