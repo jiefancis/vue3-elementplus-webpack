@@ -4,11 +4,11 @@
  * @Author: wangjie
  * @Date: 2021-10-28 20:10:06
  * @LastEditors: wangjie
- * @LastEditTime: 2021-10-28 20:28:39
+ * @LastEditTime: 2021-10-29 17:33:58
 -->
 <template>
   <div>
-    <n-input v-model:value="value" type="text"></n-input>
+    input
   </div>
 </template>
 <script lang="ts" setup>
