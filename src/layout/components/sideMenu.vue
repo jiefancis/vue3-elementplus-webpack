@@ -4,7 +4,10 @@
  * @Author: wangjie
  * @Date: 2021-09-29 17:56:50
  * @LastEditors: wangjie
- * @LastEditTime: 2021-10-08 11:29:42
+ * @LastEditTime: 2021-11-04 14:37:49
+ @open="handleOpen"
+      @close="handleClose"
+      @select="handleOpen"
 -->
 <template>
   <div class="menu-wrapper--flex">
@@ -12,10 +15,10 @@
       default-active="2"
       class="el-menu-vertical-demo"
       :collapse="isCollapse"
-      @open="handleOpen"
-      @close="handleClose"
-      @select="handleOpen"
+      router
     >
+      <el-menu-item index="/app1/">app1</el-menu-item>
+      <el-menu-item index="/app2/">app2</el-menu-item>
       <template v-for="(menu, index) in [menus]" :key="index">
         <el-sub-menu v-if="menu.childMenus && isCollapse" :index="index + 1">
           <template #title>

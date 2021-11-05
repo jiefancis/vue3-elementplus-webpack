@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-08-18 18:27:56
  * @LastEditors: wangjie
- * @LastEditTime: 2021-10-28 18:55:58
+ * @LastEditTime: 2021-11-05 14:51:54
  */
 import { createRouter, createWebHistory, useRoute } from 'vue-router'
 import useRequireContext from '@/hooks/useRequireContext'
@@ -91,7 +91,7 @@ const main = [
 const routes = [...global, ...main, ...dynamic]
 
 const router = createRouter({
-  history: createWebHistory('/vue3/'),
+  history: createWebHistory(),
   routes
 })
 

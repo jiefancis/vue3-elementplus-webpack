@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-10-28 18:46:11
  * @LastEditors: wangjie
- * @LastEditTime: 2021-10-30 10:40:06
+ * @LastEditTime: 2021-11-05 19:57:23
 -->
 <template>
   <div class="container">
@@ -22,6 +22,8 @@
       @dragover="ondragover"
       @mousedown.stop.prevent="onmousedown"
       >
+      <button class="botton" @click="undo">撤销</button>
+      <button class="botton" @click="redo">重做</button>
       <div
         class="absolute"
         v-for="(name, index) in list"
@@ -43,6 +45,7 @@ import { ref, defineComponent, onMounted, nextTick } from 'vue'
 import Input from '../components/input.vue'
 import Input1 from '../components/input1.vue'
 import Input2 from '../components/input2.vue'
+// import useScaleHook from './scaleHook'
 export default defineComponent({
   components: {
     Input,
@@ -55,6 +58,68 @@ export default defineComponent({
     const componentList = ref<Array<string>>(['Input', 'Input1', 'Input2'])
     const list = ref<Array<string>>([])
     let canvasPos: Record<string, any> = {}
+    // 撤销 重做 start
+    const snapshotData: any = new WeakMap()
+    let snapshotIndex: number = -1
+
+    /**
+     * snapshotItem: {
+        target
+        options
+        left
+        top
+        width
+        height
+      }
+     */
+    function recordSnapshot (target, action = 1) {
+      const { left, top, bottom, right } = target.style
+      const { clientWidth, clientHeight } = target
+      let set = snapshotData.get(target) || new Set()
+      if (action === 1) {
+        let options = {
+          left,
+          top,
+          bottom,
+          right,
+          clientWidth,
+          clientHeight
+        }
+        set.add(options)
+      } else {
+        set = Array.from(set).pop()
+      }
+      snapshotData.set(target, set)
+      console.log('recordSnapshot', snapshotData, snapshotData)
+    }
+    // function recordSnapshot (target, action = 1) { // 1 add 2 update
+
+    //   let map = {
+    //     target,
+    //     curOptions: {
+    //       left,
+    //       top,
+    //       bottom,
+    //       right,
+    //       clientWidth,
+    //       clientHeight
+    //     },
+    //     prevOptions: null
+    //   }
+    //   snapshotData.push(map)
+    //   snapshotIndex += 1
+    //   console.log(snapshotData, '记录快照', snapshotIndex)
+    // }
+    function undo () {
+      // if ()
+      snapshotIndex -= 1
+
+    }
+    function redo () {
+      snapshotIndex += 1
+    }
+
+    // 撤销 重做 end
 
     function setData(target, source) {
       for(let key in source) {
@@ -88,6 +153,7 @@ export default defineComponent({
 
         dropRefs.value[index].style.top = (e.pageY - canvasPos.top )+ 'px'
         dropRefs.value[index].style.left = (e.pageX - canvasPos.left )+ 'px'
+        recordSnapshot(dropRefs.value[index])
       })
     }
 
@@ -127,16 +193,28 @@ export default defineComponent({
       }
       e.target.removeEventListener('mousemove', onmousemove)
       e.target.removeEventListener('mouseup', onmouseup)
+      recordSnapshot(curMoveEl, 2)
     }
     function onmouseleave(e) {
       e.target.removeEventListener('mousemove', onmousemove)
       e.target.removeEventListener('mouseleave', onmouseleave)
     }
 
+    // const {
+    //   onPointMousedown,
+    //   onPointMouseleave,
+    //   onPointMouseup,
+    //   onPointMousemove
+    // } = useScaleHook()
     // point mouse event
+
     let orient = ''
     let spx = 0, spy = 0;
     let sox = 0, soy = 0;
+    let oWidth: number = 0
+    let oHeight: number = 0
+    let targetPoint: Record<string, any> = {}
+    let targetBox: Record<string, any> = {}
     function getOrient(target) {
       return target.className.split('--').pop()
     }
@@ -146,50 +224,49 @@ export default defineComponent({
       style.height && (target.style.height = style.height + 'px')
     }
     function onPointMousemove(e){
-      console.log('onPointMousemove', e.target.parentElement.style.height)
-      let dx = -Math.abs(e.pageX - spx);
-      let dy = -Math.abs(e.pageY - spy);
-      let clientWidth = e.target.parentElement.clientWidth
-      let clientHeight = e.target.parentElement.clientHeight
-      let parentEl = e.target.parentElement
-
+      let dx = e.pageX - spx
+      let dy = e.pageY - spy
       switch(orient) {
         case 'top':
-          soy = soy || -10
-          e.target.style.top = (dy + soy) + 'px'
-          setStyle(e.target.parentElement, {height: clientHeight - dy})
-          break;
         case 'bottom':
-          soy = soy || -10
-          e.target.style.bottom = (dy + soy) + 'px'
-          setStyle(e.target.parentElement, { height: clientHeight - dy})
+          setStyle(targetBox, { height: oHeight + dy})
           break;
         case 'left':
-          sox = sox || -10
-          e.target.style.left = (dx + sox) + 'px'
-          setStyle(e.target.parentElement, { width: clientWidth - dx })
-          break;
         case 'right':
-          sox = sox || -10
-          e.target.style.right = (dx + sox) + 'px'
-          setStyle(e.target.parentElement, { width: clientWidth - dx })
+          setStyle(targetBox, { width: oWidth + dx })
           break;
       }
+      recordSnapshot(targetBox, 2)
     }
     function onPointMouseup(e) {
       console.log('onPointMouseup', e, e.target)
       e.target.removeEventListener('mousemove', onPointMousemove)
       e.target.removeEventListener('mouseleave', onPointMouseleave)
+      targetBox.removeEventListener('mousemove', onPointMousemove)
+      targetBox.removeEventListener('mouseleave', onPointMouseleave)
     }
     function onPointMouseleave(e) {
       console.log('onPointMouseleave', e, e.target)
       e.target.removeEventListener('mousemove', onPointMousemove)
+      targetPoint.removeEventListener('mousemove', onPointMousemove)
+      targetPoint.removeEventListener('mouseleave', onPointMouseleave)
+      targetBox.removeEventListener('mousemove', onPointMousemove)
+      targetBox.removeEventListener('mouseleave', onPointMouseleave)
     }
     function onPointMousedown(e){
       let style = e.target.style
       console.log(e,'onPointMousedown', style, parseFloat(style.top))
+      const canvasEle = e.target?.parentElement?.parentElement
       orient = getOrient(e.target)
-      e.target.addEventListener('mousemove', onPointMousemove)
+      targetPoint = e.target
+      targetBox = e.target.parentElement
+      oWidth = targetBox.clientWidth
+      oHeight = targetBox.clientHeight
+      canvasEle.addEventListener('mousemove', onPointMousemove)
+      canvasEle.addEventListener('mouseup', onPointMouseup)
+      canvasEle.addEventListener('mouseleave', onPointMouseleave)
+      targetBox.addEventListener('mouseup', onPointMouseup)
+      targetBox.addEventListener('mouseleave', onPointMouseleave)
       e.target.addEventListener('mouseup', onPointMouseup)
       e.target.addEventListener('mouseleave', onPointMouseleave)
       spx = e.pageX
@@ -209,7 +286,9 @@ export default defineComponent({
       canvasRef,
       canvasPos,
       dropRefs,
-      onPointMousedown
+      onPointMousedown,
+      undo,
+      redo
     }
   }
 })
