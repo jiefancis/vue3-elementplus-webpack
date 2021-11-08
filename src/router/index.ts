@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-08-18 18:27:56
  * @LastEditors: wangjie
- * @LastEditTime: 2021-11-05 14:51:54
+ * @LastEditTime: 2021-11-08 19:58:06
  */
 import { createRouter, createWebHistory, useRoute } from 'vue-router'
 import useRequireContext from '@/hooks/useRequireContext'
@@ -39,9 +39,15 @@ const main = [
   {
     path: '/',
     name: 'layout',
-    redirect: '/uiEngine',
+    redirect: '/components',
     component: () => import('@/layout/index.vue'),
     children: [
+      {
+        path: 'components',
+        name: 'components',
+        component: () => import('@/page/components/index.vue'),
+        meta: { title: 'components'}
+      },
       {
         path: 'reduce',
         name: 'reduce',
@@ -73,17 +79,23 @@ const main = [
         meta: { title: '个人信息' }
       },
       {
-        path: 'micropage/:pathMatch(.*)*',
-        name: 'micropage',
-        component: () => import('@/page/micropage/index.vue'),
-        meta: { title: '微应用挂载' }
+        path: 'virsual-list',
+        name: 'virtualList',
+        component: () => import('@/page/virtualList/index.vue'),
+        meta: { title: '虚拟列表' }
       },
       {
         path: 'uiEngine',
         name: 'uiEngine',
         component: () => import('@/page/uiEngine/layout/layout.vue'),
         meta: { title: 'uiEngine' }
-      }
+      },
+      {
+        path: 'micropage/:pathMatch(.*)*',
+        name: 'micropage',
+        component: () => import('@/page/micropage/index.vue'),
+        meta: { title: '微应用挂载' }
+      },
     ]
   }
 ]

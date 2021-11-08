@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-10-28 18:46:11
  * @LastEditors: wangjie
- * @LastEditTime: 2021-11-05 19:57:23
+ * @LastEditTime: 2021-11-08 17:10:26
 -->
 <template>
   <div class="container">
@@ -13,9 +13,11 @@
         v-for="(text,index) in componentList"
         :key="index"
         draggable="true"
+        @click="toggleVirsualList"
         @dragstart="(e) => ondragstart(e, text)"
       >{{text}}</div>
     </div>
+    <VirsualList class="virsual-list" v-if="showVirsualList"/>
     <div class="center"
       ref="canvasRef"
       @drop="ondrop"
@@ -41,16 +43,18 @@
   </div>
 </template>
 <script lang="ts">
-import { ref, defineComponent, onMounted, nextTick } from 'vue'
+import { ref, defineComponent, onMounted, nextTick, defineAsyncComponent } from 'vue'
 import Input from '../components/input.vue'
 import Input1 from '../components/input1.vue'
 import Input2 from '../components/input2.vue'
+// import VirsualList from '../../virtualList/index.vue'
 // import useScaleHook from './scaleHook'
 export default defineComponent({
   components: {
     Input,
     Input1,
-    Input2
+    Input2,
+    VirsualList: defineAsyncComponent(() => import('../../virtualList/index.vue'))
   },
   setup() {
     const dropRefs = ref([]) as any
@@ -58,8 +62,9 @@ export default defineComponent({
     const componentList = ref<Array<string>>(['Input', 'Input1', 'Input2'])
     const list = ref<Array<string>>([])
     let canvasPos: Record<string, any> = {}
+    let showVirsualList = ref<boolean>(false)
     // 撤销 重做 start
-    const snapshotData: any = new WeakMap()
+    const snapshotData: Array<any> = []
     let snapshotIndex: number = -1
 
     /**
@@ -75,7 +80,7 @@ export default defineComponent({
     function recordSnapshot (target, action = 1) {
       const { left, top, bottom, right } = target.style
       const { clientWidth, clientHeight } = target
-      let set = snapshotData.get(target) || new Set()
+      let set = new Set() // snapshotData.get(target) || new Set()
       if (action === 1) {
         let options = {
           left,
@@ -87,9 +92,9 @@ export default defineComponent({
         }
         set.add(options)
       } else {
-        set = Array.from(set).pop()
+        // set = Array.from(set).pop()
       }
-      snapshotData.set(target, set)
+      // snapshotData.set(target, set)
       console.log('recordSnapshot', snapshotData, snapshotData)
     }
     // function recordSnapshot (target, action = 1) { // 1 add 2 update
@@ -276,6 +281,9 @@ export default defineComponent({
       soy = parseFloat(style.top) || 0
     }
 
+    function toggleVirsualList() {
+      showVirsualList.value = !showVirsualList.value
+    }
     return {
       ondragstart,
       ondrop,
@@ -288,7 +296,9 @@ export default defineComponent({
       dropRefs,
       onPointMousedown,
       undo,
-      redo
+      redo,
+      toggleVirsualList,
+      showVirsualList
     }
   }
 })
@@ -315,6 +325,14 @@ export default defineComponent({
 // }
 </script>
 <style lang="scss" scoped>
+.virsual-list {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 600px;
+  z-index: 100;
+}
 .container{
   display: flex;
   justify-content: space-between;
