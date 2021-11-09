@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-11-08 20:00:47
  * @LastEditors: wangjie
- * @LastEditTime: 2021-11-08 21:09:50
+ * @LastEditTime: 2021-11-09 11:24:42
 -->
 <!--
   usage
@@ -67,23 +67,29 @@ function onCompositionend(e){
 
 </script> -->
 
+
+<!--
+  // emits: {
+  //   'update:value': Function
+  //     type: Function,default() => (value: string) => void
+  //   }
+  // },
+-->
 <!-- defineComponents -->
 <script lang="ts">
 import { defineComponent, ref} from 'vue'
 export default defineComponent({
+  name: 'm-input',
   props: {
     value: String
   },
-  // emit: {
-  //   'update:value': (value: string) => void
-  // },
+  emits: ['update:value'],
   setup (props, ctx) {
     let inputValue = ref<string | undefined>(props.value)
-    console.log(props, 'setup', ctx)
     let compositionFlag = ref<boolean>(false)
     function inputValueChange(e) {
       if (!compositionFlag.value) {
-        console.log('inputValueChange', e.target.value)
+        inputValue.value = e.target.value
         ctx.emit('update:value', e.target.value)
       }
     }
@@ -92,7 +98,8 @@ export default defineComponent({
     }
     function onCompositionend(e){
       compositionFlag.value = false
-      ctx.emit('update:value', e.data)
+      inputValue.value = e.target.value
+      ctx.emit('update:value', e.target.value)
     }
 
     return {
