@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-08-18 18:27:56
  * @LastEditors: wangjie
- * @LastEditTime: 2021-11-08 19:58:06
+ * @LastEditTime: 2021-11-12 16:04:33
  */
 import { createRouter, createWebHistory, useRoute } from 'vue-router'
 import useRequireContext from '@/hooks/useRequireContext'
@@ -39,9 +39,13 @@ const main = [
   {
     path: '/',
     name: 'layout',
-    redirect: '/components',
+    redirect: '/process',
     component: () => import('@/layout/index.vue'),
     children: [
+      {
+        path: 'process',
+        component: () => import('@/page/process/index.vue')
+      },
       {
         path: 'components',
         name: 'components',

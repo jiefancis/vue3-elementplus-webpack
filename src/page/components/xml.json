@@ -1,0 +1,355 @@
+{
+  "definitions": {
+    "-xmlns": "http://www.omg.org/spec/BPMN/20100524/MODEL",
+    "-xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
+    "-xmlns:activiti": "http://activiti.org/bpmn",
+    "-xmlns:bpmndi": "http://www.omg.org/spec/BPMN/20100524/DI",
+    "-xmlns:omgdc": "http://www.omg.org/spec/DD/20100524/DC",
+    "-xmlns:omgdi": "http://www.omg.org/spec/DD/20100524/DI",
+    "-typeLanguage": "http://www.w3.org/2001/XMLSchema",
+    "-expressionLanguage": "http://www.w3.org/1999/XPath",
+    "-targetNamespace": "ff80808163aab2210163ab05d2bb0001",
+    "process": {
+      "-id": "reimbursementflow1",
+      "-name": "费用报销流程模板(一)",
+      "startEvent": {
+        "-id": "start1",
+        "-name": "开始",
+        "-activiti:initiator": "applyUserId"
+      },
+      "endEvent": {
+        "-id": "end1529390930345",
+        "-name": "结束"
+      },
+      "userTask": [
+        {
+          "-id": "task1529390886066",
+          "-name": "填写申请",
+          "-activiti:assignee": "${applyUserId}",
+          "-activiti:formKey": "ff80808163875bde0163877f58810005",
+          "extensionElements": {
+            "activiti:taskListener": {
+              "-id": "402881ef4095603b014095c7d6e30009",
+              "-event": "complete",
+              "-class": "com.olymtech.oa.manager.workFlow.listener.task.TurnBackTaskListener"
+            }
+          }
+        },
+        {
+          "-id": "task1529390906380",
+          "-name": "部门审批",
+          "-activiti:assignee": "${assigneeUser}",
+          "-activiti:formKey": "ff80808163875bde0163877f58810005",
+          "multiInstanceLoopCharacteristics": {
+            "-isSequential": "true",
+            "-activiti:collection": "assigneeUserIdList",
+            "-activiti:elementVariable": "assigneeUser",
+            "loopCardinality": "${assigneeUserCount}",
+            "completionCondition": "${doBackTask==1}"
+          }
+        },
+        {
+          "-id": "task1529390915138",
+          "-name": "财务主管",
+          "-activiti:candidateGroups": "ff808081644f677901644f7d73e20004",
+          "-activiti:formKey": "ff80808163875bde0163877f58810005"
+        },
+        {
+          "-id": "task1529391126934",
+          "-name": "行政助理",
+          "-activiti:candidateGroups": "ff808081644f677901644f7ceb420001",
+          "-activiti:formKey": "ff80808163875bde0163877f58810005"
+        }
+      ],
+      "serviceTask": {
+        "-id": "task1530068118185",
+        "-name": "业务处理",
+        "-activiti:expression": "${flowUtil.updateApplyInfo(execution)}",
+        "documentation": "更新业务数据"
+      },
+      "exclusiveGateway": {
+        "-id": "exclusiveGateway1531459618799",
+        "-name": "exclusive Gateway"
+      },
+      "sequenceFlow": [
+        {
+          "-id": "flow1529390975954",
+          "-sourceRef": "start1",
+          "-targetRef": "task1529390886066"
+        },
+        {
+          "-id": "flow1529390979849",
+          "-sourceRef": "task1529390906380",
+          "-targetRef": "task1529390915138"
+        },
+        {
+          "-id": "flow1529390984234",
+          "-sourceRef": "task1529390915138",
+          "-targetRef": "task1530068118185"
+        },
+        {
+          "-id": "flow1529391174821",
+          "-sourceRef": "task1529390886066",
+          "-targetRef": "task1529391126934"
+        },
+        {
+          "-id": "flow1529391202443",
+          "-sourceRef": "task1529391126934",
+          "-targetRef": "exclusiveGateway1531459618799"
+        },
+        {
+          "-id": "flow1530068135628",
+          "-sourceRef": "task1530068118185",
+          "-targetRef": "end1529390930345"
+        },
+        {
+          "-id": "flow1531459647383",
+          "-name": "有部门审批",
+          "-sourceRef": "exclusiveGateway1531459618799",
+          "-targetRef": "task1529390906380",
+          "conditionExpression": {
+            "-xsi:type": "tFormalExpression",
+            "#cdata-section": "${assigneeUserCount>0}"
+          }
+        },
+        {
+          "-id": "flow1531459712313",
+          "-name": "无部门审批",
+          "-sourceRef": "exclusiveGateway1531459618799",
+          "-targetRef": "task1529390915138",
+          "conditionExpression": {
+            "-xsi:type": "tFormalExpression",
+            "#cdata-section": "${assigneeUserCount<1}"
+          }
+        }
+      ]
+    },
+    "bpmndi:BPMNDiagram": {
+      "-id": "BPMNDiagram_reimbursementflow1",
+      "bpmndi:BPMNPlane": {
+        "-bpmnElement": "reimbursementflow1",
+        "-id": "BPMNPlane_reimbursementflow1",
+        "bpmndi:BPMNShape": [
+          {
+            "-bpmnElement": "start1",
+            "-id": "BPMNShape_start1",
+            "omgdc:Bounds": {
+              "-height": "30",
+              "-width": "30",
+              "-x": "36",
+              "-y": "37"
+            }
+          },
+          {
+            "-bpmnElement": "end1529390930345",
+            "-id": "BPMNShape_end1529390930345",
+            "omgdc:Bounds": {
+              "-height": "30",
+              "-width": "30",
+              "-x": "580",
+              "-y": "369"
+            }
+          },
+          {
+            "-bpmnElement": "task1529390886066",
+            "-id": "BPMNShape_task1529390886066",
+            "omgdc:Bounds": {
+              "-height": "50",
+              "-width": "90",
+              "-x": "147",
+              "-y": "27"
+            }
+          },
+          {
+            "-bpmnElement": "task1529390906380",
+            "-id": "BPMNShape_task1529390906380",
+            "omgdc:Bounds": {
+              "-height": "50",
+              "-width": "90",
+              "-x": "531",
+              "-y": "178"
+            }
+          },
+          {
+            "-bpmnElement": "task1529390915138",
+            "-id": "BPMNShape_task1529390915138",
+            "omgdc:Bounds": {
+              "-height": "50",
+              "-width": "90",
+              "-x": "180",
+              "-y": "247"
+            }
+          },
+          {
+            "-bpmnElement": "task1529391126934",
+            "-id": "BPMNShape_task1529391126934",
+            "omgdc:Bounds": {
+              "-height": "50",
+              "-width": "90",
+              "-x": "311",
+              "-y": "27"
+            }
+          },
+          {
+            "-bpmnElement": "task1530068118185",
+            "-id": "BPMNShape_task1530068118185",
+            "omgdc:Bounds": {
+              "-height": "50",
+              "-width": "90",
+              "-x": "395",
+              "-y": "361"
+            }
+          },
+          {
+            "-bpmnElement": "exclusiveGateway1531459618799",
+            "-id": "BPMNShape_exclusiveGateway1531459618799",
+            "omgdc:Bounds": {
+              "-height": "40",
+              "-width": "40",
+              "-x": "336",
+              "-y": "120"
+            }
+          }
+        ],
+        "bpmndi:BPMNEdge": [
+          {
+            "-bpmnElement": "flow1529390975954",
+            "-id": "BPMNEdge_flow1529390975954",
+            "omgdi:waypoint": [
+              {
+                "-x": "66",
+                "-y": "52"
+              },
+              {
+                "-x": "142",
+                "-y": "52"
+              }
+            ]
+          },
+          {
+            "-bpmnElement": "flow1529390979849",
+            "-id": "BPMNEdge_flow1529390979849",
+            "omgdi:waypoint": [
+              {
+                "-x": "576",
+                "-y": "233"
+              },
+              {
+                "-x": "576",
+                "-y": "272"
+              },
+              {
+                "-x": "275",
+                "-y": "272"
+              }
+            ]
+          },
+          {
+            "-bpmnElement": "flow1529390984234",
+            "-id": "BPMNEdge_flow1529390984234",
+            "omgdi:waypoint": [
+              {
+                "-x": "225",
+                "-y": "302"
+              },
+              {
+                "-x": "225",
+                "-y": "386"
+              },
+              {
+                "-x": "390",
+                "-y": "386"
+              }
+            ]
+          },
+          {
+            "-bpmnElement": "flow1529391174821",
+            "-id": "BPMNEdge_flow1529391174821",
+            "omgdi:waypoint": [
+              {
+                "-x": "242",
+                "-y": "52"
+              },
+              {
+                "-x": "306",
+                "-y": "52"
+              }
+            ]
+          },
+          {
+            "-bpmnElement": "flow1529391202443",
+            "-id": "BPMNEdge_flow1529391202443",
+            "omgdi:waypoint": [
+              {
+                "-x": "356",
+                "-y": "82"
+              },
+              {
+                "-x": "356",
+                "-y": "120"
+              }
+            ]
+          },
+          {
+            "-bpmnElement": "flow1530068135628",
+            "-id": "BPMNEdge_flow1530068135628",
+            "omgdi:waypoint": [
+              {
+                "-x": "490",
+                "-y": "386"
+              },
+              {
+                "-x": "535",
+                "-y": "386"
+              },
+              {
+                "-x": "535",
+                "-y": "384"
+              },
+              {
+                "-x": "580",
+                "-y": "384"
+              }
+            ]
+          },
+          {
+            "-bpmnElement": "flow1531459647383",
+            "-id": "BPMNEdge_flow1531459647383",
+            "omgdi:waypoint": [
+              {
+                "-x": "376",
+                "-y": "140"
+              },
+              {
+                "-x": "576",
+                "-y": "140"
+              },
+              {
+                "-x": "576",
+                "-y": "173"
+              }
+            ]
+          },
+          {
+            "-bpmnElement": "flow1531459712313",
+            "-id": "BPMNEdge_flow1531459712313",
+            "omgdi:waypoint": [
+              {
+                "-x": "336",
+                "-y": "140"
+              },
+              {
+                "-x": "225",
+                "-y": "140"
+              },
+              {
+                "-x": "225",
+                "-y": "242"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

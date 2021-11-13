@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-09-17 17:06:14
  * @LastEditors: wangjie
- * @LastEditTime: 2021-10-26 18:42:41
+ * @LastEditTime: 2021-11-10 15:22:49
  */
 'use strict'
 const path = require('path')
@@ -37,10 +37,10 @@ module.exports = {
   //     description: 'one page multi page'
   //   }
   // },
-  pages: {
-    one: 'src/nested/one.ts',
-    index: 'src/main.ts'
-  },
+  // pages: {
+  //   one: 'src/nested/one.ts',
+  //   index: 'src/main.ts'
+  // },
   // publicPath: process.env.NODE_ENV === 'production' ? '/' : '/',
   // outputDir: 'enterprise',
   // outputDir: `dist-${process.env.NODE_ENV}`,
