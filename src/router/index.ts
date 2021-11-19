@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-08-18 18:27:56
  * @LastEditors: wangjie
- * @LastEditTime: 2021-11-12 16:04:33
+ * @LastEditTime: 2021-11-19 15:08:58
  */
 import { createRouter, createWebHistory, useRoute } from 'vue-router'
 import useRequireContext from '@/hooks/useRequireContext'
@@ -37,14 +37,22 @@ function autoConfig() {
 
 const main = [
   {
+    path: '/formDesign',
+    component: () => import('@/page/formDesign/index.vue')
+  },
+  {
+    path: '/process',
+    component: () => import('@/page/process/index.vue')
+  },
+  {
     path: '/',
     name: 'layout',
-    redirect: '/process',
+    redirect: '/formDesign',
     component: () => import('@/layout/index.vue'),
     children: [
       {
-        path: 'process',
-        component: () => import('@/page/process/index.vue')
+        path: 'x6',
+        component: () => import('@/page/antdV6/index.vue')
       },
       {
         path: 'components',

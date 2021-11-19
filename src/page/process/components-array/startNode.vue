@@ -2,19 +2,34 @@
  * @Descripttion:
  * @version:
  * @Author: wangjie
- * @Date: 2021-11-13 18:06:19
+ * @Date: 2021-11-15 14:12:23
  * @LastEditors: wangjie
- * @LastEditTime: 2021-11-15 14:31:45
+ * @LastEditTime: 2021-11-15 14:52:14
 -->
 <template>
   <div class="flow-row">
-    <div class="flow-end-box">
-      <div class="flow-item">
-        <div class="flow-end">结束</div>
+    <div class="flow-box">
+      <div class="flow-item" style="padding-top: 0px;">
+        <div class="node-name node-start">开始</div>
+      </div>
+      <div class="after-node-btn node-start-btn">
+        <AddIcon :index="0"/>
       </div>
     </div>
   </div>
 </template>
+<script lang="ts">
+import AddIcon from './addIcon.vue'
+import { defineComponent } from 'vue'
+export default defineComponent({
+  components: {
+    AddIcon
+  },
+  setup() {
+
+  }
+})
+</script>
 <style lang="scss" scoped>
 .flow-row {
   display: flex;
@@ -32,7 +47,7 @@
   flex-grow: 1;
   padding: 0 50px;
   position: relative;
-  &.flow-row .flow-box:before {
+  &.flow-box:before {
     content: "";
     position: absolute;
     top: 0;
@@ -69,26 +84,5 @@
   .node-start-btn {
     padding-bottom: 20px;
   }
-
-}
-.flow-end-box{
-  padding-bottom: 120px;
-}
-.flow-end {
-  position: relative;
-  display: flex;
-  z-index: 2;
-  -webkit-box-pack: center;
-  justify-content: center;
-  -webkit-box-align: center;
-  align-items: center;
-  width: 60px;
-  height: 60px;
-  border-radius: 60px;
-  color: #f8f8fa;
-  background-image: linear-gradient(-30deg,#bbbbc4,#d5d5de),linear-gradient(#bcbcc5,#bcbcc5);
-  background-blend-mode: normal,normal;
-  box-shadow: 0 2px 10px 0 rgba(145,145,153,50%);
-  font-size: 18px;
 }
 </style>

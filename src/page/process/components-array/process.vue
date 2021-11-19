@@ -4,52 +4,36 @@
  * @Author: wangjie
  * @Date: 2021-11-12 16:04:46
  * @LastEditors: wangjie
- * @LastEditTime: 2021-11-19 10:35:28
--->
-<!-- 分支节点 单个节点-->
-<!--
-  分支节点：
-      flex-row
-        flex-branch
-          flex-col
-            flex-row
-            flex-row-container
-
+ * @LastEditTime: 2021-11-16 13:36:51
 -->
 <template>
-  <div class="process" @click="() => isShowNodeBtn = false">
-    <!-- <nodeBtn v-show="isShowNodeBtn" ref="nodeBtnRef"/> -->
-    <startNode/>
-    <Process v-model:node="nodes"/>
-    <endNode/>
+  <!-- <div class="process" @click="() => isShowNodeBtn = false"> -->
+    <!-- <div class="container" v-for="(node, index) in nodeList" :key="node.id">
+      <Card v-if="node.type !== 'branch'" :index="index" :nodeData="node"/>
+      <Branch v-if="node.type === 'branch'" :index="index" :nodeData="node"/>
+    </div> -->
+  <!-- </div> -->
+  <div class="container">
+    <Card/>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, provide, ref, nextTick, watch } from "vue"
-import { nodeTypes, nodeTypeNameMap } from './utils/constansts.js'
-import startNode from './components/startNode.vue'
-import endNode from './components/endNode.vue'
-import nodeBtn from './components/nodeBtn.vue'
-import Branch from './components/branch.vue'
-import Card from './components/card.vue'
-import Process from './components/process.vue'
+import { defineComponent, provide, ref, nextTick } from "vue"
+import { nodeTypes, nodeTypeNameMap } from '../utils/constansts.js'
+import startNode from './startNode.vue'
+import endNode from './endNode.vue'
+import nodeBtn from './nodeBtn.vue'
+import Branch from './branch.vue'
+import Card from './card.vue'
 export default defineComponent({
   components: {
     Card,
     Branch,
     nodeBtn,
     startNode,
-    endNode,
-    Process
+    endNode
   },
   setup() {
-    let nodes = ref<Record<string, any>>({})
-    watch(
-      () => nodes,
-      (newVal, oldVal) => {
-        console.log(newVal, 'watch-nodes', oldVal)
-      }
-    )
     const nodeList = ref<Array<Record<string, any>>>([])
     const nodeMap = ref<Record<string, any>>({})
     let isShowNodeBtn = ref<Boolean>(false)
@@ -108,13 +92,13 @@ export default defineComponent({
       console.log(nodeList.value, 'addFlowNodeaddFlowNodeaddFlowNode', args)
       isShowNodeBtn.value = true
       const e = args[0]
-      // if ((e.clientY + 30 + 300) >= containerRef.clientHeight) {
-      //   nodeBtnRef.value.$el.style.left = e.clientX + 30 + 'px'
-      //   nodeBtnRef.value.$el.style.top = e.clientY - 300 + 'px'
-      // } else {
-      //   nodeBtnRef.value.$el.style.left = e.clientX + 30 + 'px'
-      //   nodeBtnRef.value.$el.style.top = e.clientY + 'px'
-      // }
+      if ((e.clientY + 30 + 300) >= containerRef.clientHeight) {
+        nodeBtnRef.value.$el.style.left = e.clientX + 30 + 'px'
+        nodeBtnRef.value.$el.style.top = e.clientY - 300 + 'px'
+      } else {
+        nodeBtnRef.value.$el.style.left = e.clientX + 30 + 'px'
+        nodeBtnRef.value.$el.style.top = e.clientY + 'px'
+      }
       if (args.length >= 2) {
         addIndex = args[1]
         console.log('addIndex', addIndex)
@@ -147,8 +131,7 @@ export default defineComponent({
       isShowNodeBtn,
       nodeBtnRef,
       containerRef,
-      nodeList,
-      nodes
+      nodeList
     }
   }
 })

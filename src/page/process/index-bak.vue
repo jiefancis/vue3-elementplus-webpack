@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-11-12 16:04:46
  * @LastEditors: wangjie
- * @LastEditTime: 2021-11-19 10:35:28
+ * @LastEditTime: 2021-11-16 14:22:14
 -->
 <!-- 分支节点 单个节点-->
 <!--
@@ -18,7 +18,7 @@
 -->
 <template>
   <div class="process" @click="() => isShowNodeBtn = false">
-    <!-- <nodeBtn v-show="isShowNodeBtn" ref="nodeBtnRef"/> -->
+    <nodeBtn v-show="isShowNodeBtn" ref="nodeBtnRef"/>
     <startNode/>
     <Process v-model:node="nodes"/>
     <endNode/>
@@ -43,7 +43,9 @@ export default defineComponent({
     Process
   },
   setup() {
-    let nodes = ref<Record<string, any>>({})
+    let nodes = ref<Record<string, any>>({
+      type: null
+    })
     watch(
       () => nodes,
       (newVal, oldVal) => {
@@ -108,13 +110,13 @@ export default defineComponent({
       console.log(nodeList.value, 'addFlowNodeaddFlowNodeaddFlowNode', args)
       isShowNodeBtn.value = true
       const e = args[0]
-      // if ((e.clientY + 30 + 300) >= containerRef.clientHeight) {
-      //   nodeBtnRef.value.$el.style.left = e.clientX + 30 + 'px'
-      //   nodeBtnRef.value.$el.style.top = e.clientY - 300 + 'px'
-      // } else {
-      //   nodeBtnRef.value.$el.style.left = e.clientX + 30 + 'px'
-      //   nodeBtnRef.value.$el.style.top = e.clientY + 'px'
-      // }
+      if ((e.clientY + 30 + 300) >= containerRef.clientHeight) {
+        nodeBtnRef.value.$el.style.left = e.clientX + 30 + 'px'
+        nodeBtnRef.value.$el.style.top = e.clientY - 300 + 'px'
+      } else {
+        nodeBtnRef.value.$el.style.left = e.clientX + 30 + 'px'
+        nodeBtnRef.value.$el.style.top = e.clientY + 'px'
+      }
       if (args.length >= 2) {
         addIndex = args[1]
         console.log('addIndex', addIndex)

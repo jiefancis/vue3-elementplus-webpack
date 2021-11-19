@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-11-12 16:19:44
  * @LastEditors: wangjie
- * @LastEditTime: 2021-11-17 18:57:41
+ * @LastEditTime: 2021-11-15 14:55:28
 -->
 <template>
 <div class="flow-row">
@@ -37,7 +37,7 @@
     </div>
   </div>
   <div class="add-node-btn">
-    <AddIcon v-model:node="nodeData"/>
+    <AddIcon :index="nodeIndex"/>
   </div>
   </div>
 </div>
@@ -54,12 +54,16 @@ export default defineComponent({
     AddIcon
   },
   props: {
-    nodeData: Object
+    nodeData: Object,
+    index: Number
   },
   setup(props) {
     console.log('card.vue', props)
+    const nodeIndex = (props.index as number) + 1
     const nodeOps = inject('nodeOps') as Record<string, any>
     return {
+      delNode: (...args) => nodeOps.delNode(...args, props.index),
+      nodeIndex,
       nodeData: props.nodeData as Record<string, any>
     }
   }

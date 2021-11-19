@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-09-10 15:30:42
  * @LastEditors: wangjie
- * @LastEditTime: 2021-11-05 14:53:45
+ * @LastEditTime: 2021-11-15 13:42:51
 -->
 <template>
   <div class="layout-wrapper">
@@ -59,9 +59,9 @@ const state = reactive<State>({
 
 .container {
   flex: 1;
-  /deep/ .el-scrollbar__wrap {
-    height: 626px;
-  }
+  // /deep/ .el-scrollbar__wrap {
+  //   height: 626px;
+  // }
 }
 .logo {
   width: 100%;
