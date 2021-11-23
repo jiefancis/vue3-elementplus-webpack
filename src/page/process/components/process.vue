@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-11-12 16:04:46
  * @LastEditors: wangjie
- * @LastEditTime: 2021-11-23 18:28:13
+ * @LastEditTime: 2021-11-23 20:58:30
 -->
 <!-- <template>
     <div class="container">
@@ -43,6 +43,7 @@ import nodeBtn from './nodeBtn.vue'
 import Branch from './branch.vue'
 import Card from './card.vue'
 import addIcon from './addIcon.vue'
+import Store from '../store'
 export default defineComponent({
   name: 'Process',
   // components: {
@@ -58,13 +59,13 @@ export default defineComponent({
   },
   // emits: ['update:node'],
   setup(props, ctx) {
-    console.log('resolveComponent', resolveComponent('process'))
-    let node
-    if(!props.node) {
-      node = (props as any).node = {childNode: null}
-    } else {
-      node = (props as any).node
-    }
+    console.log('resolveComponent', props.node)
+    let node = props.node
+    // if(!props.node) {
+    //   node = (props as any).node = {childNode: null}
+    // } else {
+    //   node = (props as any).node
+    // }
     // const node = props.node as any
     watch(
       () => node,
@@ -76,19 +77,19 @@ export default defineComponent({
         deep: true
       }
     )
-    const ProcessCom = resolveComponent('Card')
     function renderBox(node) {
+      console.log('renderBox', node)
       return  (
         <div class="box">
           <div class="container">
-            <Card v-model:node={node} v-show={node.childNode}/>
-            <div class="flex-container--branch">
-              <Branch v-model:node={node} v-show={node.conditionNodes}/>
-            </div>
+            <Card v-model:node={node} v-show={node}/>
+            {/*<div class="flex-container--branch" v-show={node.type === 'branch'}>
+              <Branch v-model:node={node}/>
+            </div>*/}
           </div>
           <div class="box-container">
           {
-            node.childNode && renderBox(node.childNode)
+            node?.childNode && renderBox(node.childNode)
           }
           </div>
 

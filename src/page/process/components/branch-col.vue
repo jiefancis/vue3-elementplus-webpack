@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-11-12 17:50:07
  * @LastEditors: wangjie
- * @LastEditTime: 2021-11-19 10:12:56
+ * @LastEditTime: 2021-11-23 20:08:06
 -->
 <template>
   <div class="flow-col" v-for="(cNode,index) in node.conditionNodes" :key="index">
@@ -33,9 +33,9 @@
         </div>
       </div>
     </div>
-    <div class="flow-row-container">
+    <!-- <div class="flow-row-container">
       <Process v-if="node.childNode" v-model:node="node"/>
-    </div>
+    </div> -->
   </div>
 </template>
 <script lang="ts">

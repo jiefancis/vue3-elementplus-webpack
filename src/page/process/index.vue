@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-11-12 16:04:46
  * @LastEditors: wangjie
- * @LastEditTime: 2021-11-23 16:43:27
+ * @LastEditTime: 2021-11-23 20:51:29
 -->
 <!-- 分支节点 单个节点-->
 <!--
@@ -33,6 +33,7 @@ import nodeBtn from './components/nodeBtn.vue'
 import Branch from './components/branch.vue'
 import Card from './components/card.vue'
 import Process from './components/process.vue'
+import Store from './store'
 export default defineComponent({
   components: {
     Card,
@@ -43,11 +44,12 @@ export default defineComponent({
     Process
   },
   setup() {
-    let nodes = ref<Record<string, any>>({})
+    let nodes = ref<Record<string, any>>({name: 'top', childNode: null})
     watch(
       () => nodes,
       (newVal, oldVal) => {
         console.log(newVal, 'process-index watch-nodes', oldVal)
+        Store.addNode(newVal)
       },
       {
         deep: true
@@ -151,7 +153,7 @@ export default defineComponent({
       nodeBtnRef,
       containerRef,
       nodeList,
-      nodes
+      nodes: Store.state.node
     }
   }
 })

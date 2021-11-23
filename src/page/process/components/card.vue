@@ -4,12 +4,12 @@
  * @Author: wangjie
  * @Date: 2021-11-12 16:19:44
  * @LastEditors: wangjie
- * @LastEditTime: 2021-11-23 19:44:59
+ * @LastEditTime: 2021-11-23 20:38:26
 -->
 <template>
 <div class="flow-row">
-  <div class="flow-box">
-    <div class="flow-item" v-if="node">
+  <div class="flow-box" v-if="node">
+    <div class="flow-item" >
         <div class="flow-node-box">
           <div class="node-name node-sp">
             <span>{{ node.name }}</span>
@@ -36,13 +36,10 @@
         </div>
       </div>
     </div>
-    <div class="add-node-btn card" >
+    <div class="add-node-btn card">
       <AddIcon v-model:node="node.childNode"/>
     </div>
   </div>
-  <!-- <div class="flex-container">
-    <Process v-model:node="node" v-if="node.childNode"/>
-  </div> -->
 </div>
 
 </template>
@@ -64,7 +61,7 @@ export default defineComponent({
   },
   setup(props, ctx) {
     console.log('setup-props.node', props.node)
-    let node = props.node
+    let node = props.node as any
     // if(!props.node) {
     //   node = (props as any).node = { childNode: null}
     // } else {
@@ -75,14 +72,14 @@ export default defineComponent({
       () => node,
       (newVal, oldVal) => {
         ctx.emit('update:node', newVal)
-        console.log('card--node--watch', (props.node as any).childNode)
+        console.log('card--node--watch', (props.node as any)?.childNode)
       }
     )
-    console.log('card--node', (props.node as any).childNode)
+    // console.log('card--node', (props.node as any)?.childNode)
     // (props.node as any).childNode = (props.node as any).childNode || {}
     // const nodeOps = inject('nodeOps') as Record<string, any>
     return {
-      node: node as Record<string, any>
+      node: node
     }
   }
 })

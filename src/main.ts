@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-08-18 18:26:58
  * @LastEditors: wangjie
- * @LastEditTime: 2021-11-23 13:55:25
+ * @LastEditTime: 2021-11-23 20:57:12
  */
 import { createApp } from 'vue'
 import App from './App.vue'
@@ -34,19 +34,19 @@ app.use(naive)
 app.mount('#app')
 
 
-if(navigator.serviceWorker) {
-  window.addEventListener('DOMContentLoaded', function(){
-    navigator.serviceWorker.register('./sw.js').then(function(...args){
-      console.log('注册成功状态', args)
-      function heart() {
-        navigator.serviceWorker.controller?.postMessage('心跳机制')
-        // setTimeout(heart, 1000)
-      }
-      heart()
+// if(navigator.serviceWorker) {
+//   window.addEventListener('DOMContentLoaded', function(){
+//     navigator.serviceWorker.register('./sw.js').then(function(...args){
+//       console.log('注册成功状态', args)
+//       function heart() {
+//         navigator.serviceWorker.controller?.postMessage('心跳机制')
+//         // setTimeout(heart, 1000)
+//       }
+//       heart()
 
-    })
-  })
-}
+//     })
+//   })
+// }
 
 // function autoConfig() {
 //   const context: any = require.context('@/page/uiEngine', true, /\.vue$/)

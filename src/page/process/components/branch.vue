@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-11-12 17:04:46
  * @LastEditors: wangjie
- * @LastEditTime: 2021-11-23 18:17:50
+ * @LastEditTime: 2021-11-23 20:08:37
 -->
 <template>
 <div class="flow-row">
@@ -18,9 +18,6 @@
   <div class="after-branch-btn">
     <AddIcon v-model:node="node.childNode"/>
   </div>
-  <!-- <div class="flex-container">
-    <Process v-model:node="node" v-show="node.childNode"/>
-  </div> -->
 </div>
 
 </template>

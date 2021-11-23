@@ -4,12 +4,12 @@
  * @Author: wangjie
  * @Date: 2021-11-12 16:12:17
  * @LastEditors: wangjie
- * @LastEditTime: 2021-11-23 17:35:40
+ * @LastEditTime: 2021-11-23 20:55:08
 -->
 <template>
   <n-popover placement="right-end" trigger="click">
     <template #trigger>
-      <div class="add-icon" @click="addClick">
+      <div class="add-icon">
         <span class="add-icon__circle">
           +
         </span>
@@ -107,7 +107,8 @@ export default defineComponent({
       console.log('addClick', props.node)
     }
     function addFlowNode(key) {
-      console.log('addFlowNode', key)
+      console.log('addFlowNode', key, props.node)
+      debugger
       let data
       if (key === 'branch') {
         data = {
