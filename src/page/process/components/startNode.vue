@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-11-15 14:12:23
  * @LastEditors: wangjie
- * @LastEditTime: 2021-11-19 10:27:04
+ * @LastEditTime: 2021-11-23 17:34:27
 -->
 <template>
   <div class="flow-row">
@@ -13,20 +13,36 @@
         <div class="node-name node-start">开始</div>
       </div>
       <div class="after-node-btn node-start-btn">
-        <AddIcon/>
+        <AddIcon v-model:node="node.childNode"/>
       </div>
     </div>
   </div>
 </template>
 <script lang="ts">
 import AddIcon from './addIcon.vue'
-import { defineComponent } from 'vue'
+import { defineComponent, watch } from 'vue'
 export default defineComponent({
   components: {
     AddIcon
   },
-  setup() {
-
+  props: {
+    node: Object
+  },
+  setup(props, ctx) {
+    let node = props.node
+    watch(
+      () => node,
+      (newVal, oldVal) => {
+        console.log(oldVal, 'startNode watch - setup', newVal)
+        ctx.emit('update:node', newVal)
+      },
+      {
+        deep: true
+      }
+    )
+    return {
+      node: node as Record<string, any>
+    }
   }
 })
 </script>

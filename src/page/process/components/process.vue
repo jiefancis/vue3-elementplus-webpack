@@ -4,20 +4,19 @@
  * @Author: wangjie
  * @Date: 2021-11-12 16:04:46
  * @LastEditors: wangjie
- * @LastEditTime: 2021-11-19 10:42:46
+ * @LastEditTime: 2021-11-23 18:28:13
 -->
-<template>
-  <!-- <div class="process" @click="() => isShowNodeBtn = false"> -->
+<!-- <template>
     <div class="container">
       <div class="node" v-if="node?.type && node?.type !== 'branch'">
         <p class="card-node">普通节点 {{node.name}}</p>
         <addIcon/>
-        <!-- <div class="add-icon">
+        <div class="add-icon">
           <span class="add-icon__circle" @click="addNode(node)">
             +
           </span>
         </div> -->
-        <!-- <button @click="addNode(true)"> + </button> -->
+        <!-- <button @click="addNode(true)"> + </button>
       </div>
 
       <div class="flow-container" v-if="node?.type === 'branch'">
@@ -34,10 +33,9 @@
       </div>
       <process v-if="node?.childNode" v-model:node="node.childNode"></process>
     </div>
-  <!-- </div> -->
-</template>
-<script lang="ts">
-import { defineComponent, provide, ref, nextTick } from "vue"
+</template> -->
+<script lang="tsx">
+import { defineComponent, provide, ref, nextTick, watch, resolveComponent } from "vue"
 import { nodeTypes, nodeTypeNameMap } from '../utils/constansts.js'
 import startNode from './startNode.vue'
 import endNode from './endNode.vue'
@@ -46,159 +44,58 @@ import Branch from './branch.vue'
 import Card from './card.vue'
 import addIcon from './addIcon.vue'
 export default defineComponent({
-  name: 'process',
-  components: {
-    Card,
-    Branch,
-    nodeBtn,
-    startNode,
-    endNode,
-    addIcon
-  },
+  name: 'Process',
+  // components: {
+  //   Card,
+  //   Branch,
+  //   nodeBtn,
+  //   startNode,
+  //   endNode,
+  //   addIcon
+  // },
   props: {
     node: Object
   },
   // emits: ['update:node'],
   setup(props, ctx) {
-
-    const nodes = ref<Record<string, any>>({})
-    console.log('process--------------', props)
-    const nodeList = ref<Array<Record<string, any>>>([])
-    const nodeMap = ref<Record<string, any>>({})
-    let isShowNodeBtn = ref<Boolean>(false)
-    const nodeBtnRef = ref<any>()
-    let addIndex = -1
-    let containerRef
-    nextTick(() => {
-      containerRef = document.querySelector('.process')
-    })
-    function removeNode(id) {
-      console.log('removeNode', id)
+    console.log('resolveComponent', resolveComponent('process'))
+    let node
+    if(!props.node) {
+      node = (props as any).node = {childNode: null}
+    } else {
+      node = (props as any).node
     }
-
-    function createNode(type) {
-      return {
-        id: Date.now(),
-        config: {},
-        name: nodeTypeNameMap[type],
-        nodes: null,
-        type
+    // const node = props.node as any
+    watch(
+      () => node,
+      (newVal, oldVal) => {
+        ctx.emit('update:node', newVal)
+        console.log('process.vue emit', newVal)
+      },
+      {
+        deep: true
       }
-    }
+    )
+    const ProcessCom = resolveComponent('Card')
+    function renderBox(node) {
+      return  (
+        <div class="box">
+          <div class="container">
+            <Card v-model:node={node} v-show={node.childNode}/>
+            <div class="flex-container--branch">
+              <Branch v-model:node={node} v-show={node.conditionNodes}/>
+            </div>
+          </div>
+          <div class="box-container">
+          {
+            node.childNode && renderBox(node.childNode)
+          }
+          </div>
 
-    function createBranchNode() {
-      return {
-        name: '分支节点',
-        branchId: Date.now(),
-        rule: '条件 json格式',
-        toNodeId: null
-      }
+        </div>
+      )
     }
-    function createBranchList() {
-      return {
-        id: Date.now(),
-        branchNodes: [createBranchNode(), createBranchNode()],
-        type: 'branch'
-      }
-    }
-
-    function initNodes() {
-      nodeMap.value
-    }
-    // add del node
-    function delNode(...args) {
-      let [e, index] = args
-      console.log('delNode in process/index.vue', args)
-      if (![null, undefined].includes(index)) {
-        nodeList.value.splice(index, 1)
-      }
-    }
-    function delBranch(...args) {
-      console.log('delBranch in process/index.vue', args)
-    }
-
-    function addFlowNode(...args) {
-      console.log(nodeList.value, 'addFlowNodeaddFlowNodeaddFlowNode', args)
-      isShowNodeBtn.value = true
-      const e = args[0]
-      // if ((e.clientY + 30 + 300) >= containerRef.clientHeight) {
-      //   nodeBtnRef.value.$el.style.left = e.clientX + 30 + 'px'
-      //   nodeBtnRef.value.$el.style.top = e.clientY - 300 + 'px'
-      // } else {
-      //   nodeBtnRef.value.$el.style.left = e.clientX + 30 + 'px'
-      //   nodeBtnRef.value.$el.style.top = e.clientY + 'px'
-      // }
-      if (args.length >= 2) {
-        addIndex = args[1]
-        console.log('addIndex', addIndex)
-      } else {
-        nodeList.value.splice(addIndex, 0, createNode(args[0]))
-        console.log('添加元素', nodeList.value)
-      }
-    }
-
-    function addBranch(...args) {
-      console.log('addBranch in process/index.vue', args)
-    }
-    function addBranchNode(...args) {
-      console.log('addBranchNode in process/index.vue', args)
-      if (addIndex !== -1) {
-        nodeList.value.splice(addIndex, 0, createBranchList())
-      }
-    }
-    provide('nodeOps', {
-      removeNode,
-      delNode,
-      delBranch,
-      addFlowNode,
-      addBranch,
-      addBranchNode
-    })
-    function addNode(cNode) {
-      console.log('addNode-------',cNode)
-      // if (!cNode) {
-      //   // (cNode as Record<string, any>)
-      //   let node = (props.node as Record<string, any>)
-      //   node.childNode = {
-      //     type: '',
-      //     name: Date.now(),
-      //   }
-
-      //   ctx.emit('update:node', node)
-      //   return
-      // }
-      const node = props.node as Record<string, any>;
-      console.log('addNode当前节点', JSON.parse(JSON.stringify(node)), node)
-      if(node.type !== 'branch') {
-        node.childNode = {
-          type: 'branch',
-          name: Date.now(),
-          childNode: null,
-          conditionNode: [ {name: Date.now(),}, {name: Date.now(),} ]
-        }
-      } else {
-        node.childNode = {
-          type: '',
-          name: Date.now(),
-          // childNode: {
-          //   type: '',
-          //   name: '232134'
-          // },
-        }
-      }
-      ctx.emit('update:node', node)
-    }
-
-    return {
-      nodeMap: nodeMap.value,
-      isShowNodeBtn,
-      nodeBtnRef,
-      containerRef,
-      nodeList,
-      node: props.node as Record<string, any>,
-      conditionNodes: props.node as any,
-      addNode
-    }
+    return () => renderBox(node)
   }
 })
 </script>

@@ -4,42 +4,45 @@
  * @Author: wangjie
  * @Date: 2021-11-12 16:19:44
  * @LastEditors: wangjie
- * @LastEditTime: 2021-11-17 18:57:41
+ * @LastEditTime: 2021-11-23 19:44:59
 -->
 <template>
 <div class="flow-row">
   <div class="flow-box">
-     <div class="flow-item">
-      <div class="flow-node-box">
-        <div class="node-name node-sp">
-          <span>{{ nodeData.name }}</span>
-          <div class="search-input el-input" style="display: none;">
-            <input type="text" autocomplete="off" id="1459067759072641024" class="el-input__inner">
-          </div>
-          <img  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyFpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQyIDc5LjE2MDkyNCwgMjAxNy8wNy8xMy0wMTowNjozOSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo4MTdGMUQ3RTg4OTcxMUVCOEM4QThBRTkzNUQ1OUNEQSIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDo4MTdGMUQ3Rjg4OTcxMUVCOEM4QThBRTkzNUQ1OUNEQSI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjgxN0YxRDdDODg5NzExRUI4QzhBOEFFOTM1RDU5Q0RBIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjgxN0YxRDdEODg5NzExRUI4QzhBOEFFOTM1RDU5Q0RBIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+M6Uh4QAAARNJREFUeNpi/P//PwMOIAzEoUBsDcRSULFnQHwEiFcD8TtsmhhxGGgOxDVAzIPDss9A3ATEZ4gxUAGIZwAxOwN+8BOI04H4IbIgExaFSUQYxgBVk4guiM1AUwbigSkhAxmBmIMEAzkJGfgfPUwIgAfEeHkDCQZuIMbAjUB8gAjD9gHxZmLTISM0UUcCsQCa3AcgXgrEa6FBRNCFsLBcBcQLsMgtBuI12AzDZyAMSGMRU8anAeRlkKGpQGwDxKxo8vxYktFPqLeRwR8gPgXE01iAhAUQR5AQs6AcIo5FPBCIb4Ncp8tAPaDHRChMSAQKoDDUAzKMqGTgWUY8BSxZABQpVUCsRCXz7oAM1ABiWWo5ECDAAE5EOqFnWT67AAAAAElFTkSuQmCC" alt="" style="margin-left: 10px;">
-        </div>
-        <div class="node-main">
-          <span >审批人：</span>
-          <div class="flex-box">
-            <div class="left">
-              <span class="node-face">s</span>
+    <div class="flow-item" v-if="node">
+        <div class="flow-node-box">
+          <div class="node-name node-sp">
+            <span>{{ node.name }}</span>
+            <div class="search-input el-input" style="display: none;">
+              <input type="text" autocomplete="off" id="1459067759072641024" class="el-input__inner">
             </div>
-            <div class="right">
-              <div class="full-name">无名残血打boss</div>
+            <img  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyFpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQyIDc5LjE2MDkyNCwgMjAxNy8wNy8xMy0wMTowNjozOSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo4MTdGMUQ3RTg4OTcxMUVCOEM4QThBRTkzNUQ1OUNEQSIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDo4MTdGMUQ3Rjg4OTcxMUVCOEM4QThBRTkzNUQ1OUNEQSI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjgxN0YxRDdDODg5NzExRUI4QzhBOEFFOTM1RDU5Q0RBIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjgxN0YxRDdEODg5NzExRUI4QzhBOEFFOTM1RDU5Q0RBIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+M6Uh4QAAARNJREFUeNpi/P//PwMOIAzEoUBsDcRSULFnQHwEiFcD8TtsmhhxGGgOxDVAzIPDss9A3ATEZ4gxUAGIZwAxOwN+8BOI04H4IbIgExaFSUQYxgBVk4guiM1AUwbigSkhAxmBmIMEAzkJGfgfPUwIgAfEeHkDCQZuIMbAjUB8gAjD9gHxZmLTISM0UUcCsQCa3AcgXgrEa6FBRNCFsLBcBcQLsMgtBuI12AzDZyAMSGMRU8anAeRlkKGpQGwDxKxo8vxYktFPqLeRwR8gPgXE01iAhAUQR5AQs6AcIo5FPBCIb4Ncp8tAPaDHRChMSAQKoDDUAzKMqGTgWUY8BSxZABQpVUCsRCXz7oAM1ABiWWo5ECDAAE5EOqFnWT67AAAAAElFTkSuQmCC" alt="" style="margin-left: 10px;">
+          </div>
+          <div class="node-main">
+            <span >审批人：</span>
+            <div class="flex-box">
+              <div class="left">
+                <span class="node-face">s</span>
+              </div>
+              <div class="right">
+                <div class="full-name">{{node.type}}</div>
+              </div>
             </div>
           </div>
+          <div class="node-main" v-show="false">
+            <span class="hint-title">设置此节点</span>
+          </div>
+        <div class="close-icon"><i data-v-25036ad3="" class="el-icon-close"></i>
         </div>
-        <div class="node-main" v-show="false">
-          <span class="hint-title">设置此节点</span>
-        </div>
-      <div class="close-icon" @click="delNode"><i data-v-25036ad3="" class="el-icon-close"></i>
       </div>
     </div>
+    <div class="add-node-btn card" >
+      <AddIcon v-model:node="node.childNode"/>
+    </div>
   </div>
-  <div class="add-node-btn">
-    <AddIcon v-model:node="nodeData"/>
-  </div>
-  </div>
+  <!-- <div class="flex-container">
+    <Process v-model:node="node" v-if="node.childNode"/>
+  </div> -->
 </div>
 
 </template>
@@ -48,19 +51,38 @@
  * data props
  */
 import AddIcon from './addIcon.vue'
-import { defineComponent, inject, ref } from 'vue'
+import Process from './process.vue'
+import { defineComponent, watch } from 'vue'
 export default defineComponent({
+  name: 'Card',
   components: {
-    AddIcon
+    AddIcon,
+    Process
   },
   props: {
-    nodeData: Object
+    node: Object
   },
-  setup(props) {
-    console.log('card.vue', props)
-    const nodeOps = inject('nodeOps') as Record<string, any>
+  setup(props, ctx) {
+    console.log('setup-props.node', props.node)
+    let node = props.node
+    // if(!props.node) {
+    //   node = (props as any).node = { childNode: null}
+    // } else {
+    //   node = props.node
+    // }
+
+    watch(
+      () => node,
+      (newVal, oldVal) => {
+        ctx.emit('update:node', newVal)
+        console.log('card--node--watch', (props.node as any).childNode)
+      }
+    )
+    console.log('card--node', (props.node as any).childNode)
+    // (props.node as any).childNode = (props.node as any).childNode || {}
+    // const nodeOps = inject('nodeOps') as Record<string, any>
     return {
-      nodeData: props.nodeData as Record<string, any>
+      node: node as Record<string, any>
     }
   }
 })

@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-11-12 16:04:46
  * @LastEditors: wangjie
- * @LastEditTime: 2021-11-19 10:35:28
+ * @LastEditTime: 2021-11-23 16:43:27
 -->
 <!-- 分支节点 单个节点-->
 <!--
@@ -19,7 +19,7 @@
 <template>
   <div class="process" @click="() => isShowNodeBtn = false">
     <!-- <nodeBtn v-show="isShowNodeBtn" ref="nodeBtnRef"/> -->
-    <startNode/>
+    <startNode v-model:node="nodes"/>
     <Process v-model:node="nodes"/>
     <endNode/>
   </div>
@@ -47,7 +47,10 @@ export default defineComponent({
     watch(
       () => nodes,
       (newVal, oldVal) => {
-        console.log(newVal, 'watch-nodes', oldVal)
+        console.log(newVal, 'process-index watch-nodes', oldVal)
+      },
+      {
+        deep: true
       }
     )
     const nodeList = ref<Array<Record<string, any>>>([])

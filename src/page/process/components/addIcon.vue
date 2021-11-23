@@ -4,23 +4,23 @@
  * @Author: wangjie
  * @Date: 2021-11-12 16:12:17
  * @LastEditors: wangjie
- * @LastEditTime: 2021-11-19 10:26:29
+ * @LastEditTime: 2021-11-23 17:35:40
 -->
 <template>
-  <n-popover placement="right-end" trigger="hover">
+  <n-popover placement="right-end" trigger="click">
     <template #trigger>
-      <div class="add-icon">
-        <span class="add-icon__circle" @click="addFlowNode">
-          +1
+      <div class="add-icon" @click="addClick">
+        <span class="add-icon__circle">
+          +
         </span>
       </div>
     </template>
     <div class="large-text">
       <n-grid :x-gap="12" :y-gap="8" :cols="1">
         <n-grid-item v-for="(grid,index) in grids" :key="index">
-          <div class="grid-content" v-if="!grid.options" @click="addFlowNode">{{grid.label}}</div>
+          <div class="grid-content" v-if="!grid.options" @click="() => addFlowNode(grid.key)">{{grid.label}}</div>
           <n-dropdown trigger="hover" @select="addFlowNode" placement="right-end" :options="grid.options" v-else>
-            <n-button>{{grid.title}}</n-button>
+            <div>{{grid.title}}<span style="width: 0; height: 0; border: 5px solid transparent;border-left-color: #000;display: inline-block;"></span></div>
           </n-dropdown>
         </n-grid-item>
       </n-grid>
@@ -32,7 +32,7 @@ import { NPopover, NDropdown, NGrid, NGridItem } from 'naive-ui'
 import { defineComponent, inject, ref } from "vue"
 export default defineComponent({
   props: {
-    index: Number
+    node: Object
   },
   components: {
     NPopover,
@@ -40,7 +40,8 @@ export default defineComponent({
     NGrid,
     NGridItem
   },
-  setup(props) {
+  emits: ['update:node'],
+  setup(props, ctx) {
     const dropdownOptions = ref<Record<string, Array<Record<string, any>>>>({
       data: [
         {
@@ -71,7 +72,7 @@ export default defineComponent({
         }
       ]
     })
-    const grids = ref<Array<any>>([
+    const grids = ref<Array<Record<string, any>>>([
       {
         label: '审批节点',
         key: 'apply'
@@ -96,20 +97,65 @@ export default defineComponent({
         title: '通知节点',
         options: dropdownOptions.value.notice
       },
-      '分隔节点'
-    ])
-    const nodeOps = inject('nodeOps') as Record<string, any>
+      {
+        label: '分隔节点',
+        key: 'finish'
+      }
 
-    console.log('nodeOps in addIcon', nodeOps)
+    ])
+    function addClick() {
+      console.log('addClick', props.node)
+    }
+    function addFlowNode(key) {
+      console.log('addFlowNode', key)
+      let data
+      if (key === 'branch') {
+        data = {
+          type: 'branch',
+          childNode: props.node,
+          conditionNodes: [
+            {
+              name: '分支节点1',
+              childNode: null
+            },
+            {
+              name: '分支节点2',
+              childNode: null
+            }
+          ]
+        }
+      } else if (key === 'finish') {
+        data = {
+          type: 'finish',
+          name: '分隔节点',
+          childNode: props.node
+        }
+      } else {
+        data = {
+          type: key,
+          name: key,
+          childNode: props.node
+        }
+      }
+      console.log('key', key, data)
+      ctx.emit('update:node', data)
+    }
+    // const nodeOps = inject('nodeOps') as Record<string, any>
+
+    // console.log('nodeOps in addIcon', nodeOps)
     return {
-      addFlowNode: (...args) => nodeOps.addFlowNode(...args, props.index),
+      addFlowNode,
       grids,
-      dropdownOptions
+      dropdownOptions,
+      addClick
     }
   }
 })
 </script>
-<Style lang="scss" scoped>
+<style lang="scss" scoped>
+:deep(.n-grid) {
+  cursor: pointer;
+}
 .add-icon{
   position: relative;
   z-index: 10;
@@ -128,4 +174,4 @@ export default defineComponent({
     border-radius: 50%;
   }
 }
-</Style>
+</style>
