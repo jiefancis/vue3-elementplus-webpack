@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-11-12 16:12:17
  * @LastEditors: wangjie
- * @LastEditTime: 2021-11-24 15:00:07
+ * @LastEditTime: 2021-11-24 15:15:32
 -->
 <template>
   <n-popover placement="right-end" trigger="click">
@@ -134,12 +134,14 @@ export default defineComponent({
         }
       } else if (key === 'finish') {
         data = {
+          id: Date.now(),
           type: 'finish',
           name: '分隔节点',
           childNode: props.node
         }
       } else {
         data = {
+          id: Date.now(),
           type: key,
           name: key,
           childNode: props.node

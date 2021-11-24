@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-11-12 16:04:46
  * @LastEditors: wangjie
- * @LastEditTime: 2021-11-24 15:02:26
+ * @LastEditTime: 2021-11-24 15:19:57
 -->
 <script lang="tsx">
 import { defineComponent, computed, provide, ref, nextTick, watch, resolveComponent } from "vue"
@@ -43,12 +43,26 @@ export default defineComponent({
         toNodeId: null
       }
     }
+    function delBranchNodes(node, delId){
+      if(node?.childNode && node?.childNode?.type === 'branch') {
+        if(node?.childNode.id === delId) {
+          node.childNode = node.childNode?.childNode
+        }
+      } else {
+        delBranchNodes(node.childNode, delId)
+      }
+    }
+    function delNode(linked, node) {
+      if(linked?.childNode && linked?.childNode?.id === node?.id) {
+        linked.childNode = node?.childNode
+      } else {
+        delNode(linked.childNode, node)
+      }
+    }
     function delTerm(node, index) {
       if(node.conditionNodes?.length <= 2) {
         // delete node.conditionNodes
-
-        node = node.childNode
-
+        delBranchNodes(nodes.value, node.id)
       } else {
         node.conditionNodes.splice(index, 1)
       }
@@ -89,7 +103,7 @@ export default defineComponent({
                         <div class="node-main" v-show="false">
                           <span class="hint-title">设置此节点</span>
                         </div>
-                      <div class="close-icon"><i data-v-25036ad3="" class="el-icon-close"></i>
+                      <div class="close-icon" onClick={() => delNode(nodes.value, node)}><i data-v-25036ad3="" class="el-icon-close"></i>
                       </div>
                     </div>
                   </div>
