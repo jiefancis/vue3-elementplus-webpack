@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-11-12 16:04:46
  * @LastEditors: wangjie
- * @LastEditTime: 2021-11-23 20:51:29
+ * @LastEditTime: 2021-11-24 13:40:17
 -->
 <!-- 分支节点 单个节点-->
 <!--
@@ -18,9 +18,8 @@
 -->
 <template>
   <div class="process" @click="() => isShowNodeBtn = false">
-    <!-- <nodeBtn v-show="isShowNodeBtn" ref="nodeBtnRef"/> -->
-    <startNode v-model:node="nodes"/>
-    <Process v-model:node="nodes"/>
+    <startNode/>
+    <Process/>
     <endNode/>
   </div>
 </template>
@@ -44,12 +43,23 @@ export default defineComponent({
     Process
   },
   setup() {
-    let nodes = ref<Record<string, any>>({name: 'top', childNode: null})
+    let nodes = ref<Record<string, any>>({
+    name: "top",
+    childNode: null
+    // childNode: {
+    //     type: "cc",
+    //     name: "cc",
+    //     childNode: {
+    //         type: "apply",
+    //         name: "apply"
+    //     }
+    // }
+    })
     watch(
       () => nodes,
       (newVal, oldVal) => {
         console.log(newVal, 'process-index watch-nodes', oldVal)
-        Store.addNode(newVal)
+        // Store.addNode(newVal)
       },
       {
         deep: true
@@ -153,7 +163,7 @@ export default defineComponent({
       nodeBtnRef,
       containerRef,
       nodeList,
-      nodes: Store.state.node
+      nodes: nodes.value
     }
   }
 })

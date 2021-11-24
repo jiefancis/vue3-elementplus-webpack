@@ -4,33 +4,39 @@
  * @Author: wangjie
  * @Date: 2021-11-12 16:12:17
  * @LastEditors: wangjie
- * @LastEditTime: 2021-11-23 20:55:08
+ * @LastEditTime: 2021-11-24 15:00:07
 -->
 <template>
   <n-popover placement="right-end" trigger="click">
     <template #trigger>
-      <div class="add-icon">
-        <span class="add-icon__circle">
-          +
-        </span>
-      </div>
-    </template>
-    <div class="large-text">
-      <n-grid :x-gap="12" :y-gap="8" :cols="1">
-        <n-grid-item v-for="(grid,index) in grids" :key="index">
-          <div class="grid-content" v-if="!grid.options" @click="() => addFlowNode(grid.key)">{{grid.label}}</div>
-          <n-dropdown trigger="hover" @select="addFlowNode" placement="right-end" :options="grid.options" v-else>
-            <div>{{grid.title}}<span style="width: 0; height: 0; border: 5px solid transparent;border-left-color: #000;display: inline-block;"></span></div>
-          </n-dropdown>
-        </n-grid-item>
-      </n-grid>
+  <div class="add-node-btn ">
+    <div class="add-icon" @click="addNode">
+      <span class="add-icon__circle">
+        +
+      </span>
     </div>
+  </div>
+    </template>
+    <!-- <n-popover placement="right-end" trigger="hover"> -->
+      <div class="large-text">
+        <n-grid :x-gap="12" :y-gap="8" :cols="1">
+          <n-grid-item v-for="(grid,index) in grids" :key="index">
+            <div class="grid-content" v-if="!grid.options" @click="() => addFlowNode(grid.key)">{{grid.label}}</div>
+            <n-dropdown trigger="hover" @select="addFlowNode" placement="right-end" :options="grid.options" v-else>
+              <div>{{grid.title}}<span style="width: 0; height: 0; border: 5px solid transparent;border-left-color: #000;display: inline-block;"></span></div>
+            </n-dropdown>
+          </n-grid-item>
+        </n-grid>
+      </div>
+    <!-- </n-popover> -->
+  <!-- </div> -->
   </n-popover>
 </template>
 <script lang="ts">
 import { NPopover, NDropdown, NGrid, NGridItem } from 'naive-ui'
 import { defineComponent, inject, ref } from "vue"
 export default defineComponent({
+  name: 'AddIcon',
   props: {
     node: Object
   },
@@ -108,10 +114,11 @@ export default defineComponent({
     }
     function addFlowNode(key) {
       console.log('addFlowNode', key, props.node)
-      debugger
+      // debugger
       let data
       if (key === 'branch') {
         data = {
+          id: Date.now(),
           type: 'branch',
           childNode: props.node,
           conditionNodes: [
@@ -139,21 +146,46 @@ export default defineComponent({
         }
       }
       console.log('key', key, data)
+      // debugger
       ctx.emit('update:node', data)
     }
     // const nodeOps = inject('nodeOps') as Record<string, any>
 
     // console.log('nodeOps in addIcon', nodeOps)
+    function addNode() {
+      console.log('addNodeaddNode', props.node)
+    }
     return {
       addFlowNode,
       grids,
       dropdownOptions,
-      addClick
+      addClick,
+      addNode
     }
   }
 })
 </script>
 <style lang="scss" scoped>
+.add-node-btn{
+  position: relative;
+  z-index: 100;
+  padding: 20px 0 41px 0;
+  width: 30px;
+  margin: auto;
+  &:before{
+    content: ' ';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: 1px;
+    height: 100%;
+    background: #ccc;
+  }
+}
+.wrapper{
+  position: relative;
+}
 :deep(.n-grid) {
   cursor: pointer;
 }

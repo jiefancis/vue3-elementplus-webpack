@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-11-15 14:12:23
  * @LastEditors: wangjie
- * @LastEditTime: 2021-11-23 17:34:27
+ * @LastEditTime: 2021-11-24 09:27:32
 -->
 <template>
   <div class="flow-row">
@@ -12,9 +12,9 @@
       <div class="flow-item" style="padding-top: 0px;">
         <div class="node-name node-start">开始</div>
       </div>
-      <div class="after-node-btn node-start-btn">
+      <!-- <div class="after-node-btn node-start-btn">
         <AddIcon v-model:node="node.childNode"/>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>

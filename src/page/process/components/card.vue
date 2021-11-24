@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-11-12 16:19:44
  * @LastEditors: wangjie
- * @LastEditTime: 2021-11-23 20:38:26
+ * @LastEditTime: 2021-11-24 11:28:14
 -->
 <template>
 <div class="flow-row">
@@ -36,9 +36,9 @@
         </div>
       </div>
     </div>
-    <div class="add-node-btn card">
+    <!-- <div class="add-node-btn card">
       <AddIcon v-model:node="node.childNode"/>
-    </div>
+    </div> -->
   </div>
 </div>
 
