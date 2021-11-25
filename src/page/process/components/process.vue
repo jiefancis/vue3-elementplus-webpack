@@ -4,9 +4,10 @@
  * @Author: wangjie
  * @Date: 2021-11-12 16:04:46
  * @LastEditors: wangjie
- * @LastEditTime: 2021-11-24 15:19:57
+ * @LastEditTime: 2021-11-24 20:37:31
 -->
 <script lang="tsx">
+import { line } from "@antv/x6/lib/registry/port-layout/line"
 import { defineComponent, computed, provide, ref, nextTick, watch, resolveComponent } from "vue"
 import AddIcon from './addIcon.vue'
 export default defineComponent({
@@ -43,28 +44,55 @@ export default defineComponent({
         toNodeId: null
       }
     }
-    function delBranchNodes(node, delId){
-      if(node?.childNode && node?.childNode?.type === 'branch') {
-        if(node?.childNode.id === delId) {
-          node.childNode = node.childNode?.childNode
+
+    function delNode(linked, node) {
+      if(linked?.childNode) {
+        if (linked?.childNode?.id === node?.id) {
+          linked.childNode = node?.childNode
+        } else {
+          delNode(linked.childNode, node)
         }
-      } else {
-        delBranchNodes(node.childNode, delId)
+      }
+      if(linked.conditionNodes) {
+        linked.conditionNodes.forEach(cNode => delNode(cNode, node))
       }
     }
-    function delNode(linked, node) {
-      if(linked?.childNode && linked?.childNode?.id === node?.id) {
-        linked.childNode = node?.childNode
-      } else {
-        delNode(linked.childNode, node)
+    function iter(node) {
+      console.log('node.name', node.name, node.id)
+      if(node.childNode) {
+        iter(node.childNode)
+      }
+      if(node.conditionNodes) {
+        node.conditionNodes.forEach(cNode => iter(cNode))
+      }
+    }
+    function delBranch(node, delId) {
+      if (node.childNode) {
+        if(node.childNode.id === delId) {
+          node.childNode = node.childNode.childNode
+        } else {
+          delBranch(node.childNode, delId)
+        }
+      }
+
+      if(node.conditionNodes) {
+        node.conditionNodes.forEach(child => {
+          delBranch(child, delId)
+          // if(child?.childNode?.id === delId) {
+          //   child.childNode = child?.childNode?.childNode
+          // } else {
+          //   delBranch(child, delId)
+          // }
+        })
       }
     }
     function delTerm(node, index) {
-      if(node.conditionNodes?.length <= 2) {
-        // delete node.conditionNodes
-        delBranchNodes(nodes.value, node.id)
-      } else {
-        node.conditionNodes.splice(index, 1)
+      if(node.conditionNodes) {
+        if(node.conditionNodes?.length <= 2) {
+          delBranch(nodes.value, node.id)
+        } else {
+          node.conditionNodes.splice(index, 1)
+        }
       }
     }
     function renderBox(node) {
@@ -124,8 +152,8 @@ export default defineComponent({
                     <div class="meet-node"></div>
                     {
                       node.conditionNodes && node.conditionNodes.map((cNode, index) => <div class="flow-col" key={index}>
-                      <div class="clear-left-border" v-show={!index}></div>
-                      <div class="clear-right-border" v-show="index === node.conditionNodes.length - 1"></div>
+                      <div class="clear-left-border" v-show={index === 0}></div>
+                      <div class="clear-right-border" v-show={index === node.conditionNodes.length - 1}></div>
                       <div class="flow-row ">
                         <div class="flow-box">
                           <div class="flow-item flow-node-branch">
@@ -169,7 +197,7 @@ export default defineComponent({
         </div>
       )
     }
-    template = renderBox(nodes.value)
+    // template = renderBox(nodes.value)
     return () => renderBox(nodes.value)
   }
 })

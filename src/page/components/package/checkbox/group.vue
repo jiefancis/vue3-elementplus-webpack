@@ -4,37 +4,60 @@
  * @Author: wangjie
  * @Date: 2021-11-09 19:44:11
  * @LastEditors: wangjie
- * @LastEditTime: 2021-11-10 13:38:10
+ * @LastEditTime: 2021-11-25 18:46:59
 -->
-<script lang="tsx">
-import { defineComponent, provide, ref, watch } from 'vue'
+<template>
+  <div class="m-checkbox-group">
+    <slot></slot>
+  </div>
+</template>
+<script lang="ts">
+import { defineComponent, provide, ref, PropType } from 'vue'
+export const checkboxGroupInjectionKey = Symbol('checkbox-group')
 export default defineComponent({
+  name: 'mcheckboxGroup',
   props: {
-    checked: Array
+    value: Array as PropType<any[]>
   },
-  emits: ['update:checked'],
+  emits: ['update:value'],
   setup(props, ctx) {
-    function toggleChecked(e) {
-      console.log('group--toggleChecked', e)
-    }
-    const allChecked = ref<any>(props.checked)
-    watch(
-      () => allChecked.value,
-      function(newVal, oldVal) {
-        console.log('watch--allchecked', newVal, 12, oldVal)
-        ctx.emit('update:checked', newVal)
-      }
-    )
-    provide('checkboxGroup', {
+    console.log('group.vue', props.value)
+    // console.log('checkboxGroupInjectionKey', checkboxGroupInjectionKey)
+    // function toggleChecked(e) {
+    //   console.log('group--toggleChecked', e)
+    // }
+    // const allChecked = ref<any>(props.value)
+    // watch(
+    //   () => allChecked.value,
+    //   function(newVal, oldVal) {
+    //     console.log('watch--allchecked', newVal, 12, oldVal)
+    //     ctx.emit('update:value', newVal)
+    //   }
+    // )
+    let groupCheckedValues = ref<any>(props.value || [])
+    function toggleCheckGroupValues(val) {
 
-    })
-    return () => (
-      <div class="group" onClick={toggleChecked}>
-      {
-        ctx?.slots?.default?.()
+      if(Array.isArray(groupCheckedValues.value)) {
+        let indexed = groupCheckedValues.value.findIndex(item => item === val)
+        if(indexed !== -1) {
+          groupCheckedValues.value.splice(indexed, 1)
+        } else {
+          groupCheckedValues.value.push(val)
+        }
+        console.log(Array.isArray(groupCheckedValues.value), groupCheckedValues.value, 'toggleCheckGroupValues', val)
+        ctx.emit('update:value', groupCheckedValues.value)
       }
-      </div>
-    )
+    }
+    provide(checkboxGroupInjectionKey, {
+      toggleCheckGroupValues
+    })
+    // return () => (
+    //   <div class="group" onClick={toggleChecked}>
+    //   {
+    //     ctx?.slots?.default?.()
+    //   }
+    //   </div>
+    // )
   }
 })
 </script>

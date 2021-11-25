@@ -4,16 +4,16 @@
  * @Author: wangjie
  * @Date: 2021-09-10 15:30:42
  * @LastEditors: wangjie
- * @LastEditTime: 2021-11-15 13:42:51
+ * @LastEditTime: 2021-11-25 14:49:40
 -->
 <template>
   <div class="layout-wrapper">
     <nav-bar v-model:isCollapse="state.isCollapse" ref="headerRef" />
     <div class="wrap-style">
       <!-- <sidebar :collapse="state.isCollapse" /> -->
-      <side-menu :isCollapse="state.isCollapse" />
+      <!-- <side-menu :isCollapse="state.isCollapse" /> -->
       <el-scrollbar class="container">
-        <tags-view />
+        <!-- <tags-view /> -->
         <!-- <div id="microContainer"></div> -->
         <router-view />
       </el-scrollbar>

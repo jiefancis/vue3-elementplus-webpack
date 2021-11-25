@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-11-09 17:25:19
  * @LastEditors: wangjie
- * @LastEditTime: 2021-11-10 13:40:55
+ * @LastEditTime: 2021-11-25 18:38:41
 -->
 
 # usage
@@ -25,6 +25,12 @@
 
 # ouput
 
-checked boolean
+> single
+> boolean
 
-# group how to get group-item value
+> group
+> value list
+
+# checkbox in group
+
+provide inject

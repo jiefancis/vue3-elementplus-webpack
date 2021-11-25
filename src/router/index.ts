@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-08-18 18:27:56
  * @LastEditors: wangjie
- * @LastEditTime: 2021-11-19 15:08:58
+ * @LastEditTime: 2021-11-25 10:51:33
  */
 import { createRouter, createWebHistory, useRoute } from 'vue-router'
 import useRequireContext from '@/hooks/useRequireContext'
@@ -47,7 +47,7 @@ const main = [
   {
     path: '/',
     name: 'layout',
-    redirect: '/formDesign',
+    redirect: '/components',
     component: () => import('@/layout/index.vue'),
     children: [
       {
