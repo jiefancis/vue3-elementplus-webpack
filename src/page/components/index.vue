@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-11-08 19:58:23
  * @LastEditors: wangjie
- * @LastEditTime: 2021-11-25 18:08:58
+ * @LastEditTime: 2021-11-26 21:13:24
 -->
 <template>
   <div class="demo">
@@ -125,8 +125,8 @@ console.log('index.vue', options, value)
 watch(
   [options, value],
   (newVal, oldVal) => {
-    console.log('watch - index - options', newVal)
-    options.value = value[0]
+    console.log(oldVal, 'watch - index - options', newVal)
+    // options.value = value[0]
     value.vlaue = newVal[1]
   }
 )

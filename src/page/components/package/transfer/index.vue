@@ -4,14 +4,13 @@
  * @Author: wangjie
  * @Date: 2021-11-09 16:57:58
  * @LastEditors: wangjie
- * @LastEditTime: 2021-11-25 18:56:49
+ * @LastEditTime: 2021-11-26 21:23:34
 -->
 <template>
   <div class="m-transfer wrap">
     <div class="m-transfer--box m-transfer--left">
       <div class="m-transfer--header">
-        <!-- <span>源项</span> -->
-        <m-checkbox v-model:checked="checkedTarget" label="源项"/>
+        <m-checkbox  label="源项" @change="allCheckedChange('source')"/> <!--v-model:checked="allCheckedSource"-->
         <span>0/11</span>
       </div>
       <div class="m-transfer--container">
@@ -23,18 +22,17 @@
       </div>
     </div>
     <div class="m-transfer--action__wrap">
-      <div class="m-transfer--action turn-right" @click="turnRight"> 》</div>
-      <div class="m-transfer--action turn-left" @click="turnLeft"> 《 </div>
+      <div :class="['m-transfer--action turn-right', !targetValues?.length ?  'm-disabled' : '']" @click="turnRight"> 》</div>
+      <div :class="['m-transfer--action turn-left', !sourceValues?.length ?  'm-disabled' : '']" @click="turnLeft"> 《 </div>
     </div>
     <div class="m-transfer--box m-transfer--right">
       <div class="m-transfer--header">
-        <!-- <span>目标项</span> -->
-        <m-checkbox v-model:checked="checkedTarget" label="目标项"/>
+        <m-checkbox v-model:checked="allCheckedTarget" label="目标项" @change="allCheckedChange('target')"/>
         <span>0/11</span>
       </div>
       <div class="m-transfer--container">
         <MCheckboxGroup v-model:value="sourceValues">
-          <m-checkbox v-for="(val, index) in value" :label="val?.label" :key="val?.value" :value="val?.value"/>
+          <m-checkbox v-for="(val, index) in _value" :label="val?.label" :key="val?.value" :value="val?.value"/>
         </MCheckboxGroup>
 
       </div>
@@ -71,36 +69,58 @@ export default defineComponent({
   },
   emits: ['update:value', 'update:options'],
   setup(props, ctx) {
+
     console.log('transferBox', props.options, props.value)
     const style = useCssModule()
-    let checkedTarget = ref<boolean>(false)
-    let checkedSource = ref<boolean>(false)
+    let allCheckedTarget = ref<boolean>(false)
+    let allCheckedSource = ref<boolean>(false)
 
     let pendingTargetValues = ref<Array<any>>([])
     let pendingSourceValues = ref<Array<any>>([])
 
     let targetValues = ref<any>(null)
     let sourceValues = ref<any>(null)
-    let value = props.value
-    let options = props.options
+    let _value = ref<Option[]>(props.value)
+    let options = ref<Option[]>(props.options)
     function turnLeft() {
+      console.log('sourceValues.value', sourceValues.value)
       if(sourceValues.value?.length) {
-        let filter = value.filter(item => !sourceValues.value.includes(item.value))
-        value = filter
-        options.push(...sourceValues.value)
-        ctx.emit('update:options', options)
+        let selectedOptions = _value.value.filter(item => sourceValues.value.includes(item.value))
+        let filter = _value.value.filter(item => !sourceValues.value.includes(item.value))
+        _value.value = filter
+        options.value.push(...selectedOptions)
+        ctx.emit('update:options', options.value)
         ctx.emit('update:value', filter)
+        sourceValues.value = []
       }
     }
     function turnRight() {
       if(targetValues.value?.length) {
-        let filter = options.filter(item => !targetValues.value.includes(item.value))
-        options = filter
-        value.push(...targetValues.value)
+        let selectedOptions = options.value.filter(item => targetValues.value.includes(item.value))
+        let filter = options.value.filter(item => !targetValues.value.includes(item.value))
+        options.value = filter
+        _value.value.push(...selectedOptions)
         ctx.emit('update:options', filter)
-        ctx.emit('update:value', [...value])
+        ctx.emit('update:value', [..._value.value])
+        targetValues.value = []
       }
     }
+    function allCheckedChange(type) {
+      switch(type) {
+        case 'source':
+          turnLeft()
+          break;
+        case 'target':
+
+          break;
+      }
+    }
+    watch(
+      _value,
+      (newVal, oldVal) => {
+        console.log(oldVal,'watch -- _value in transfer', newVal)
+      }
+    )
     watch(
       [targetValues, sourceValues],
       (newVal, oldVal) => {
@@ -109,15 +129,16 @@ export default defineComponent({
     )
     return {
       options,
-      value,
+      _value,
       turnLeft,
       turnRight,
-      checkedTarget,
-      checkedSource,
+      allCheckedTarget,
+      allCheckedSource,
       pendingTargetValues,
       pendingSourceValues,
       targetValues,
-      sourceValues
+      sourceValues,
+      allCheckedChange
     }
   }
 })
@@ -175,4 +196,8 @@ export default defineComponent({
     line-height: 40px;
   }
 }
+.m-disabled{
+  cursor: not-allowed;
+}
+
 </style>
