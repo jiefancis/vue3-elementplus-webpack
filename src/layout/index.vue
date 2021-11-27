@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-09-10 15:30:42
  * @LastEditors: wangjie
- * @LastEditTime: 2021-11-25 14:49:40
+ * @LastEditTime: 2021-11-27 17:15:03
 -->
 <template>
   <div class="layout-wrapper">
@@ -50,6 +50,8 @@ const state = reactive<State>({
 .wrap-style {
   display: flex;
   width: 100vw;
+  // overflow: scroll;
+  // height: 100vh;
   // flex: 1;
 }
 .el-menu-vertical-demo {
