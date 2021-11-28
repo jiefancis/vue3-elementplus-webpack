@@ -43,15 +43,15 @@ export default defineComponent({
     affixStyle.value.left = affixRef.value.getBoundingClientRect().left + 'px'
     affixTop = affixRef.value.getBoundingClientRect().top + scrollTop
     container.addEventListener('scroll', function() {
-    let scrollTop = document.documentElement.scrollTop
-    console.log(props.offset,12, affixTop, 34,scrollTop,56, affixTop - scrollTop <= props.offset)
-    if (affixTop - scrollTop <= props.offset) {
-      isFix.value = true
-      affixStyle.value.top = props.offset + 'px'
-    } else {
-      isFix.value = false
-    }
-  })
+      let scrollTop = document.documentElement.scrollTop
+      console.log(props.offset,12, affixTop, 34,scrollTop,56, affixTop - scrollTop <= props.offset)
+      if (affixTop - scrollTop <= props.offset) {
+        isFix.value = true
+        affixStyle.value.top = props.offset + 'px'
+      } else {
+        isFix.value = false
+      }
+    })
   })
 
   return {
