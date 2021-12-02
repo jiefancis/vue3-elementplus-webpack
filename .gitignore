@@ -2,6 +2,7 @@
 node_modules
 /dist
 /xywl-vue
+/vue3-elementplus-webpack
 
 
 # local env files
