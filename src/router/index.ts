@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-08-18 18:27:56
  * @LastEditors: wangjie
- * @LastEditTime: 2021-11-25 10:51:33
+ * @LastEditTime: 2021-12-06 17:43:18
  */
 import { createRouter, createWebHistory, useRoute } from 'vue-router'
 import useRequireContext from '@/hooks/useRequireContext'
@@ -109,6 +109,10 @@ const main = [
         meta: { title: '微应用挂载' }
       },
     ]
+  },
+  {
+    path: '/json2vue',
+    component: () => import('@/page/json2vue.vue')
   }
 ]
 

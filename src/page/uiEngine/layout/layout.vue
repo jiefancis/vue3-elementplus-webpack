@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-10-28 18:46:11
  * @LastEditors: wangjie
- * @LastEditTime: 2021-11-08 17:10:26
+ * @LastEditTime: 2021-12-03 09:58:29
 -->
 <template>
   <div class="container">
@@ -20,12 +20,12 @@
     <VirsualList class="virsual-list" v-if="showVirsualList"/>
     <div class="center"
       ref="canvasRef"
-      @drop="ondrop"
-      @dragover="ondragover"
-      @mousedown.stop.prevent="onmousedown"
+
       >
-      <button class="botton" @click="undo">撤销</button>
-      <button class="botton" @click="redo">重做</button>
+      <!-- <button class="botton" @click="undo">撤销</button>
+      <button class="botton" @click="redo">重做</button> -->
+      <input @drop="ondrop" style="display: inline-block;height: 100px;"
+      @dragover="ondragover" placeholder="in=[[[[[[" type="file"/>
       <div
         class="absolute"
         v-for="(name, index) in list"
@@ -141,7 +141,7 @@ export default defineComponent({
     let dragEl = ''
     function ondragstart(e, text) {
       e.dataTransfer.setData('dragEl', text)
-      console.log('ondragstart', e.dataTransfer)
+      console.log(e, text,'ondragstart', e.dataTransfer)
       dragEl = text
     }
 
@@ -150,6 +150,8 @@ export default defineComponent({
       console.log('dragover', dragEl)
     }
     function ondrop(e) {
+      console.log('drop',e)
+      debugger
       e.preventDefault()
       list.value.push(dragEl)
       nextTick(() => {
