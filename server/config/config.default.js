@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-12-07 16:35:12
  * @LastEditors: wangjie
- * @LastEditTime: 2021-12-08 20:24:11
+ * @LastEditTime: 2021-12-08 21:06:20
  */
 /* eslint valid-jsdoc: "off" */
 
@@ -52,6 +52,16 @@ module.exports = appInfo => {
     mode: 'file'
   };
   config.jwtSecret="abcd"
+
+  config.sequelize = {
+    dialect: 'mysql',
+    database: 'prastise',
+    host: 'localhost',
+    port: 3306,
+    username: 'root',
+    password: '123456'
+  }
+
   return {
     ...config,
     ...userConfig,

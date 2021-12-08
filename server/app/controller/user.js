@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-12-08 18:54:18
  * @LastEditors: wangjie
- * @LastEditTime: 2021-12-08 19:59:23
+ * @LastEditTime: 2021-12-08 20:59:58
  */
 const Controller = require('egg').Controller;
 const jwt = require('jsonwebtoken')
@@ -54,5 +54,8 @@ module.exports = class UserController extends Controller{
         ...query
       }
     }
+  }
+  async test() {
+    this.ctx.body={data: 1}
   }
 }
