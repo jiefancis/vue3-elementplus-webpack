@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-09-17 17:06:14
  * @LastEditors: wangjie
- * @LastEditTime: 2021-11-19 20:35:29
+ * @LastEditTime: 2021-12-07 16:44:53
  */
 'use strict'
 const CustomPlugin = require('./src/custom-plugin.js')
@@ -77,7 +77,7 @@ module.exports = {
     // port: port,
     proxy: {
       '/api': {
-        target: '192.168.10.246:8331',
+        target: 'http://127.0.0.1:7002',
         // target: `http://192.168.19.74:8080`,
         // target: `http://192.168.19.72:8080`,
         changeOrigin: true,

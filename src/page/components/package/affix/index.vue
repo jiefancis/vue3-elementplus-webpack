@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-11-27 15:16:09
  * @LastEditors: wangjie
- * @LastEditTime: 2021-11-30 10:20:01
+ * @LastEditTime: 2021-12-07 11:51:14
 -->
 <template>
   <div class="m-affix--container" ref="affixRef">
@@ -16,7 +16,7 @@
 </template>
 <script lang='ts'>
 import { defineComponent, ref, onMounted, nextTick } from 'vue'
-import scrollHooks from './hooks'
+import affixHooks from './hooks'
 
 export default defineComponent({
  name: 'mAffix',
@@ -90,7 +90,7 @@ export default defineComponent({
   // })
 
   return {
-    ...scrollHooks(props)
+    ...affixHooks(props)
     // affixRef,
     // affixStyle,
     // absStyle,
