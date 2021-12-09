@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-12-07 16:35:12
  * @LastEditors: wangjie
- * @LastEditTime: 2021-12-08 20:59:15
+ * @LastEditTime: 2021-12-09 18:32:12
  */
 'use strict';
 
@@ -15,7 +15,7 @@ module.exports = app => {
   const { router, controller } = app;
   router.get('/', controller.home.index);
   router.post('/file/upload', controller.home.upload)
-  router.get('/signin', controller.user.signin)
-  router.get('/signup', controller.user.signup)
   require('./router/user.js')(app)
+  router.resources('role', '/api/role', controller.role)
+  router.resources('permission', '/api/permission', controller.permission)
 };

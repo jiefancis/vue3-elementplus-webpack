@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-12-07 16:35:12
  * @LastEditors: wangjie
- * @LastEditTime: 2021-12-08 21:06:20
+ * @LastEditTime: 2021-12-09 16:32:39
  */
 /* eslint valid-jsdoc: "off" */
 
@@ -32,11 +32,6 @@ module.exports = appInfo => {
   const userConfig = {
     // myAppName: 'egg',
   };
-
-  // config.cors = {
-  //   origin: '*'
-  // }
-  // domainWhiteList
   config.security = {
     csrf: {
       enable: false,
@@ -55,7 +50,7 @@ module.exports = appInfo => {
 
   config.sequelize = {
     dialect: 'mysql',
-    database: 'prastise',
+    database: 'egg',
     host: 'localhost',
     port: 3306,
     username: 'root',
