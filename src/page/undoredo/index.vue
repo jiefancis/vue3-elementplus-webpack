@@ -4,12 +4,13 @@
  * @Author: wangjie
  * @Date: 2021-12-10 16:52:38
  * @LastEditors: wangjie
- * @LastEditTime: 2021-12-11 15:52:01
+ * @LastEditTime: 2021-12-11 17:11:11
 -->
 <template>
   <div class="reundo">
     <div class="container">
-      <!-- <div class="target" :style="comp.style" v-for="(comp,index) in components" :key="index" ></div> -->
+      <div class="target" :style="comp.style" v-for="(comp,index) in components" :key="index" ></div>
+      <!-- <v-drag>123456</v-drag> -->
       <div class="target" :style="comp" @mousedown="(e) => onMousedown(e,index)" v-for="(comp,index) in renders" :key="index"></div>
       <div @click="undo">undo</div>
       <div @click="redo">redo</div>
@@ -18,14 +19,16 @@
   </div>
 </template>
 <script lang="ts">
+// import dragable from './dragable.vue'
 import { defineComponent, ref } from 'vue'
 export default defineComponent({
+  components: {
+    // 'v-drag': dragable
+  },
   setup() {
     const components = ref<Array<Record<string,any>[]>>([])
     const cursor = ref<number>(-1)
     const renders = ref<Array<Record<string,any>>>([])
-
-
 
     const style = ref<Record<string, any>>({})
     const undostack = ref<Array<Record<string, any>>>([])
@@ -74,13 +77,6 @@ export default defineComponent({
     }
     function deepclone(o) {
       return JSON.parse(JSON.stringify(o))
-      // let clone = {}
-      // for(let key in style.value) {
-      //   if(o.hasOwnProperty(key)) {
-      //     clone[key] = o[key]
-      //   }
-      // }
-      // return clone
     }
     function onMousedown(e, index) {
       const undoSnapshot = saveSnapshot()
@@ -119,12 +115,17 @@ export default defineComponent({
       }
     }
     function add() {
+      pureRedo()
       let newO = createBox()
       let snapshot = saveSnapshot()
       snapshot.push(newO)
-      components.value[++cursor.value] = snapshot
-      renders.value = snapshot
-      console.log(cursor.value, renders.value, 'components.value', components.value)
+      renders.value = components.value[++cursor.value] = snapshot
+    }
+
+    function pureRedo() {
+      while(cursor.value < components.value.length - 1) {
+        components.value.pop()
+      }
     }
 
     return {
