@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-12-08 18:54:18
  * @LastEditors: wangjie
- * @LastEditTime: 2021-12-11 18:28:41
+ * @LastEditTime: 2021-12-13 13:44:48
  */
 const BaseController = require('./base')
 const jwt = require('jsonwebtoken')
@@ -37,7 +37,6 @@ module.exports = class UserController extends BaseController{
       } catch(e) {
         reject(e)
       }
-
     }))
     let result = await Promise.all(promises)
     return result
