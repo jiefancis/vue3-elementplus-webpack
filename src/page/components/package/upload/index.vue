@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-12-02 17:01:54
  * @LastEditors: wangjie
- * @LastEditTime: 2021-12-08 13:45:32
+ * @LastEditTime: 2021-12-13 16:33:35
 -->
 <template>
  <div class="m-upload">
@@ -33,10 +33,12 @@ export default defineComponent({
     // debugger
     console.log(files.value,'onFileDrop')
   }
+
   function onDragover(e) {
     console.log('onDragover', e, e.preventDefault())
     e.preventDefault()
   }
+
   function upload(e) {
     e.preventDefault()
     let fd = new FormData()
@@ -44,12 +46,13 @@ export default defineComponent({
       console.log('append', file)
       fd.append(file.name, file)
     })
-    axios.post('http://127.0.0.1:7002/file/upload', fd, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    })
+    // axios.post('http://127.0.0.1:7002/file/upload', fd, {
+    //   headers: {
+    //     'Content-Type': 'multipart/form-data'
+    //   }
+    // })
   }
+
   return {
     onFileDrop,
     onDragover,

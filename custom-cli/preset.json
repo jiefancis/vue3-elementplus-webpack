@@ -1,0 +1,22 @@
+{
+  "useConfigFiles": true,
+  "plugins": {
+    "@vue/cli": {
+      "version": "4.4.1",
+      "prompts": true
+    },
+    "@vue/cli-plugin-babel": {},
+    "@vue/cli-plugin-router": {
+      "historyMode": true
+    },
+    "@vue/cli-plugin-vuex": {},
+    "@vue/cli-plugin-eslint": {
+      "config": "prettier",
+      "lintOn": [
+        "save",
+        "commit"
+      ]
+    }
+  },
+  "cssPreprocessor": "less"
+}

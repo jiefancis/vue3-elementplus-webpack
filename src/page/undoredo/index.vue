@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-12-10 16:52:38
  * @LastEditors: wangjie
- * @LastEditTime: 2021-12-11 17:11:11
+ * @LastEditTime: 2021-12-13 16:28:03
 -->
 <template>
   <div class="reundo">
@@ -42,16 +42,16 @@ export default defineComponent({
     }
     initundo()
     let i = 0
-    function makeAction() {
-      let action = { width: '50px', height: '50px', top: '0px', left: '0px', name:'' }
-      action.top = parseInt(`${Math.random() * 100}`) + 'px'
-      action.left = parseInt(`${Math.random() * 100}`) + 'px'
-      let o = {
-        name: `comp${i}`,
-        style: action
-      }
-      components.value.push(o)
-    }
+    // function makeAction() {
+    //   let action = { width: '50px', height: '50px', top: '0px', left: '0px', name:'' }
+    //   action.top = parseInt(`${Math.random() * 100}`) + 'px'
+    //   action.left = parseInt(`${Math.random() * 100}`) + 'px'
+    //   let o = {
+    //     name: `comp${i}`,
+    //     style: action
+    //   }
+    //   components.value.push(o)
+    // }
     function undo() {
       if(cursor.value > -1) {
         renders.value = components.value[--cursor.value]
@@ -132,7 +132,7 @@ export default defineComponent({
       style,
       undo,
       components,
-      makeAction,
+      // makeAction,
       onMousedown,
       getComputedStyleByEl,
       redo,

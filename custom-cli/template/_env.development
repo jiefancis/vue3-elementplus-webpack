@@ -1,0 +1,2 @@
+VUE_APP_LOCAL_ENV = 'http://localhost:8080/env.js'
+VUE_APP_BASE_URL = 'http://localhost:8081'
