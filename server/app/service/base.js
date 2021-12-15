@@ -4,14 +4,14 @@
  * @Author: wangjie
  * @Date: 2021-12-09 10:15:09
  * @LastEditors: wangjie
- * @LastEditTime: 2021-12-09 19:30:28
+ * @LastEditTime: 2021-12-15 18:57:05
  */
 const Service = require('egg').Service
 module.exports = class BaseService extends Service{
   async index() {
     const { app } = this;
     console.log(app.model,'this.entity', this.entity)
-    let result = await app.model[this.entity].findAll()
+    let result = await app.model[this.entity].findAndCountAll()  // ({offset: 5, limit: 5})
     return result
   }
   async create(payload) {

@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-12-09 18:30:05
  * @LastEditors: wangjie
- * @LastEditTime: 2021-12-13 15:55:42
+ * @LastEditTime: 2021-12-15 18:43:46
  */
 const BaseService = require('./base')
 module.exports = class RoleService extends BaseService{
@@ -22,9 +22,9 @@ module.exports = class RoleService extends BaseService{
     try {
       // app.model 就是 Sequelize 的 instance 目前
       const order = await app.model.RolePermission.destroy({ where: { rname }, transaction: t})
-      // console.log('destroy  order', order)
+      // console.log('bulkCreatebulkCreate', pnames)
 
-      const datas = pnames.map(pname => { rname, pname })
+      const datas = pnames.map(pname => { return { rname, pname }})
       // 批量创建
       await app.model.RolePermission.bulkCreate(datas, { transaction: t })
       // for(let pname of pnames) {
@@ -42,8 +42,8 @@ module.exports = class RoleService extends BaseService{
   }
   async findAllRnames() {
     const { app } = this
-    const result = await app.model.query('SELECT rname from rolePermission')
-    // const result = await app.model.RolePermission.findAll({ attributes: ['rname']})
+    // const result = await app.model.query('SELECT rname from rolePermission')
+    const result = await app.model.RolePermission.findAll({ attributes: ['rname']})
     return result
   }
 }
