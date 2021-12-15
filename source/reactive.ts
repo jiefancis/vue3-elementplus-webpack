@@ -4,8 +4,9 @@
  * @Author: wangjie
  * @Date: 2021-12-14 15:42:17
  * @LastEditors: wangjie
- * @LastEditTime: 2021-12-14 15:42:18
+ * @LastEditTime: 2021-12-15 16:52:39
  */
+import { track, trigger } from './effect'
 var reactiveMap = new WeakMap()
 
 function reactive(o){
@@ -47,6 +48,7 @@ var p = reactive(plain)
 function proxyGetter() {
   return function(target, key, receiver) {
     let value = Reflect.get(target, key)
+    track(target, key)
     console.log('create--get', key, value)
     if(isObject(value)) {
       console.log('value.__IS_REACTIVE', value.__IS_REACTIVE)
@@ -69,6 +71,7 @@ function proxySetter() {
         Reflect.set(target, key, value)
       }
     }
+    trigger(target, key, value)
     return true
   }
 }

@@ -4,31 +4,19 @@
  * @Author: wangjie
  * @Date: 2021-12-15 13:53:58
  * @LastEditors: wangjie
- * @LastEditTime: 2021-12-15 15:49:17
+ * @LastEditTime: 2021-12-15 16:57:41
  */
+import { reactiveEffect } from './effect'
 
-
-function isFunction(f) {
-  return typeof f === 'function'
-}
-function computed(getterOptions) {
-  let getter, setter;
-  if(isFunction(getterOptions)) {
-    getter = getterOptions
-    setter = function noop(){}
-  } else {
-    getter = getterOptions.get
-    setter = getterOptions.set
-  }
-  return new ComputedImpl(getter, setter)
-}
-
-class ComputedImpl{
+export class ComputedImpl{
   _value = undefined
+  setter = undefined
+  getter = undefined
+  effect: any
   constructor(
     getter,
     setter,
-    options
+    options?: any
   ) {
     this.getter = getter
     this.setter = setter
@@ -42,6 +30,22 @@ class ComputedImpl{
     this.setter(newVal)
   }
 }
+function isFunction(f) {
+  return typeof f === 'function'
+}
+export function computed(getterOptions) {
+  let getter, setter;
+  if(isFunction(getterOptions)) {
+    getter = getterOptions
+    setter = function noop(){}
+  } else {
+    getter = getterOptions.get
+    setter = getterOptions.set
+  }
+  return new ComputedImpl(getter, setter)
+}
+
+
 var state = {
   a: 1,
   b: 2

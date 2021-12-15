@@ -1,0 +1,204 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: wangjie
+ * @Date: 2021-12-15 16:07:59
+ * @LastEditors: wangjie
+ * @LastEditTime: 2021-12-15 16:44:49
+-->
+<html>
+
+<head>
+  <title>1</title>
+</head>
+
+<body>
+  <h1></h1>
+  <button onclick="add()"> a+2</button>
+  <script>
+    // shared/utils
+    function isFunction(f) {
+      return typeof f === 'function'
+    }
+
+    let activeEffect = null
+    let targetMap = new WeakMap()
+    class reactiveEffect {
+      constructor(fn) {
+        this.fn = fn
+      }
+      run() {
+        activeEffect = this
+        return this.fn()
+      }
+    }
+    // reactive
+    var reactiveMap = new WeakMap()
+
+    function reactive(o) {
+      if (o && typeof o === 'object') {
+        return createReactive(o)
+      } else {
+        return o
+      }
+    }
+    function isObject(o) {
+      return (o !== null) && (typeof o === 'object')
+    }
+    function markReactive(o) {
+      if (isObject(o)) {
+        o.__IS_REACTIVE = true
+      }
+    }
+    function isReactive(o) {
+      return o.__IS_REACTIVE
+    }
+    function createReactive(o) {
+      let existingProxy = reactiveMap.get(o)
+      if (existingProxy) {
+        console.log('existingProxy', existingProxy)
+        return existingProxy
+      }
+      let proxy = new Proxy(o, {
+        get: proxyGetter(),
+        set: proxySetter()
+      })
+      reactiveMap.set(o, proxy)
+      return proxy
+    }
+    var plain = { a: 1, b: { b: 2, c: { c: 3 } } }
+    var p = reactive(plain)
+
+
+    // handlers
+    function proxyGetter() {
+      return function (target, key, receiver) {
+        let value = Reflect.get(target, key)
+        console.log('create--get', key, value)
+        track(target, key)
+        if (isObject(value)) {
+          console.log('value.__IS_REACTIVE', value.__IS_REACTIVE)
+          // markReactive(value)
+          return reactive(value)
+        }
+        return value
+      }
+    }
+    function proxySetter() {
+      return function (target, key, value, receiver) {
+        let oldValue = Reflect.get(target, key)
+        console.log(value, 'set--', oldValue, target, key)
+        if (isObject(value)) {
+          // reactive(value)
+          Reflect.set(target, key, reactive(value))
+        } else {
+          if (oldValue !== value) {
+            console.log('not equal', oldValue !== value)
+            Reflect.set(target, key, value)
+          }
+        }
+        trigger(target, key, value)
+        return true
+      }
+    }
+
+    // dep
+    function createDep(effects) {
+      const dep = new Set(effects)
+      dep.n = 0
+      dep.w = 0
+      return dep
+    }
+
+    // computed
+    function computed(getterOptions) {
+      let getter, setter;
+      if (isFunction(getterOptions)) {
+        getter = getterOptions
+        setter = function noop() { }
+      } else {
+        getter = getterOptions.get
+        setter = getterOptions.set
+      }
+      return new ComputedImpl(getter, setter)
+    }
+
+    class ComputedImpl {
+      _value = undefined
+      constructor(
+        getter,
+        setter,
+        options
+      ) {
+        this.getter = getter
+        this.setter = setter
+        this.effect = new reactiveEffect(getter)
+      }
+
+      get value() {
+        return this._value = this.effect.run()
+      }
+      set value(newVal) {
+        this.setter(newVal)
+      }
+    }
+    var state = {
+      a: 1,
+      b: 2
+    }
+    var reactiveState = reactive(state)
+    var count = computed(() => {
+      let newVal = reactiveState.a + reactiveState.b
+      updateHtml(newVal)
+      console.log('computedcomputedcomputedcomputed', newVal)
+      return newVal
+    })
+
+    // effect
+
+    function track(target, key) {
+      let depsMap = targetMap.get(target)
+      if (!depsMap) {
+        depsMap = new Map()
+        targetMap.set(target, depsMap)
+      }
+      let deps = depsMap.get(key)
+      if (!deps) {
+        deps = createDep()
+        depsMap.set(key, deps)
+      }
+      trackEffect(deps)
+    }
+    function trackEffect(deps) {
+      deps.add(activeEffect)
+    }
+
+    function trigger(target, key, value) {
+      let depsMap = targetMap.get(target)
+      if (depsMap) {
+        let deps = depsMap.get(key)
+        if (deps) {
+          deps.forEach(dep => dep.run())
+        }
+      }
+    }
+
+    function updateHtml(value) {
+      document.querySelector('h1').innerHTML = value
+    }
+    let text = count.value
+    updateHtml(text)
+    console.log(targetMap, 'print', text)
+    setTimeout(() => {
+      reactiveState.a = 2
+      // console.log(targetMap, 'print--setTimeout', count.value)
+    }, 1000)
+
+    function add() {
+      console.log('addddd')
+      reactiveState.a += 2
+    }
+  </script>
+</body>
+
+</html>
