@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-12-07 16:35:12
  * @LastEditors: wangjie
- * @LastEditTime: 2021-12-13 15:23:09
+ * @LastEditTime: 2021-12-16 11:44:27
  */
 'use strict';
 
@@ -18,6 +18,7 @@ module.exports = app => {
   require('./router/user.js')(app)
   router.resources('role', '/api/role', controller.role)
   router.resources('permission', '/api/permission', controller.permission)
+  router.resources('group', '/api/group', controller.group)
 
   router.post('/api/role/setPermission', controller.role.setPermission)
   router.get('/api/role/findAllRnames', controller.role.findAllRnames)
