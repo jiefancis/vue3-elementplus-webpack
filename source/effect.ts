@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-12-15 15:49:23
  * @LastEditors: wangjie
- * @LastEditTime: 2021-12-20 15:16:34
+ * @LastEditTime: 2021-12-20 17:07:32
  */
 // import
 import { createDep } from './dep'
@@ -49,7 +49,17 @@ export function trigger(target, key, value) {
   if (depsMap) {
     let deps = depsMap.get(key)
     if (deps) {
-      deps.forEach(dep => dep.run())
+      triggerEffects(deps)
     }
   }
 }
+export function triggerEffects(deps: any[]) [
+  deps.forEach(effect => {
+    if(effect.scheduler) {
+      effect.scheduler()
+    } else [
+      effect.run()
+    ]
+  })
+]
+

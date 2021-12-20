@@ -4,7 +4,10 @@
  * @Author: wangjie
  * @Date: 2021-12-20 13:38:24
  * @LastEditors: wangjie
- * @LastEditTime: 2021-12-20 15:25:14
+ * @LastEditTime: 2021-12-20 16:37:16
+ */
+/**
+ * create effect => effect.run => get oldValue =>  ref get value => trackRefValue => ref.dep.push(effect)
  */
 import { isFunction } from './computed'
 import { reactiveEffect } from './effect'
@@ -16,7 +19,7 @@ export function watch(source, cb) {
   } else if(isRef(source)) {
     getter = () => source.value
   } else {
-    getter = ()　=> source.value
+    getter = () => source.value
   }
   let oldValue = undefined
   const job = () => {
