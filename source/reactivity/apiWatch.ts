@@ -41,6 +41,5 @@ export function doWatch(source, cb) {
   }
   return () => {
     console.log('stop watch')
-    
   }
 }
