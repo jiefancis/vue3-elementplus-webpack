@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-12-15 13:53:58
  * @LastEditors: wangjie
- * @LastEditTime: 2021-12-15 16:57:41
+ * @LastEditTime: 2021-12-20 15:54:50
  */
 import { reactiveEffect } from './effect'
 
@@ -13,6 +13,7 @@ export class ComputedImpl{
   setter = undefined
   getter = undefined
   effect: any
+  dep: any[]
   constructor(
     getter,
     setter,
@@ -30,7 +31,7 @@ export class ComputedImpl{
     this.setter(newVal)
   }
 }
-function isFunction(f) {
+export function isFunction(f) {
   return typeof f === 'function'
 }
 export function computed(getterOptions) {

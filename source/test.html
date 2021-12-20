@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-12-15 16:07:59
  * @LastEditors: wangjie
- * @LastEditTime: 2021-12-15 16:44:49
+ * @LastEditTime: 2021-12-20 16:11:17
 -->
 <html>
 
@@ -24,8 +24,9 @@
     let activeEffect = null
     let targetMap = new WeakMap()
     class reactiveEffect {
-      constructor(fn) {
+      constructor(fn, scheduler) {
         this.fn = fn
+        this.scheduler = scheduler
       }
       run() {
         activeEffect = this
@@ -125,6 +126,7 @@
 
     class ComputedImpl {
       _value = undefined
+      dep = []
       constructor(
         getter,
         setter,
@@ -136,6 +138,7 @@
       }
 
       get value() {
+        trackRefValue(this)
         return this._value = this.effect.run()
       }
       set value(newVal) {
@@ -178,7 +181,15 @@
       if (depsMap) {
         let deps = depsMap.get(key)
         if (deps) {
-          deps.forEach(dep => dep.run())
+          deps.forEach(effect => {
+            if (effect.scheduler) {
+              console.log('scheduler if run')
+              effect.scheduler()
+            } else {
+              console.log('run else run', targetMaps)
+              effect.run()
+            }
+          })
         }
       }
     }
@@ -198,6 +209,40 @@
       console.log('addddd')
       reactiveState.a += 2
     }
+
+    // watch
+    function watch(source, cb) {
+      let getter = () => source.value
+
+
+      const scheduler = () => {
+        if (cb) {
+          const newValue = effect.run()
+          cb(newValue, oldValue)
+          oldValue = newValue
+        }
+      }
+      let effect = new reactiveEffect(getter, scheduler)
+
+      if (cb) {
+        oldValue = effect.run()
+        console.log('watch has cb', oldValue)
+      } else {
+        effect.run()
+        console.log('watch not cb', oldValue)
+      }
+
+      console.log(effect, 'activeEffect', activeEffect)
+    }
+
+    watch(count, (...args) => {
+      console.log('watch-count', args)
+    })
+
+    setTimeout(() => {
+      count.value = 10
+      console.log('count.value', count.value)
+    }, 5000)
   </script>
 </body>
 

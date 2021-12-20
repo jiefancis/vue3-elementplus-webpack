@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-09-17 17:06:14
  * @LastEditors: wangjie
- * @LastEditTime: 2021-12-07 16:44:53
+ * @LastEditTime: 2021-12-20 09:23:48
  */
 'use strict'
 const CustomPlugin = require('./src/custom-plugin.js')
@@ -116,6 +116,7 @@ module.exports = {
     }
   },
   chainWebpack (config) {
+    console.log('chainWebpack', config)
     config.plugins.delete('preload') // TODO: need test
     config.plugins.delete('prefetch') // TODO: need test
 
