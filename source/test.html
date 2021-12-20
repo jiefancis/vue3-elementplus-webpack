@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-12-15 16:07:59
  * @LastEditors: wangjie
- * @LastEditTime: 2021-12-20 16:11:17
+ * @LastEditTime: 2021-12-20 18:03:04
 -->
 <html>
 
@@ -138,11 +138,12 @@
       }
 
       get value() {
+        console.log('get value trackRefValue', this)
         trackRefValue(this)
         return this._value = this.effect.run()
       }
       set value(newVal) {
-        this.setter(newVal)
+        this._value = newVal
       }
     }
     var state = {
@@ -186,12 +187,21 @@
               console.log('scheduler if run')
               effect.scheduler()
             } else {
-              console.log('run else run', targetMaps)
+              console.log(effect, 'run else run', targetMap)
               effect.run()
             }
           })
         }
       }
+    }
+    function triggerRefValue(deps) {
+      deps.forEach(effect => {
+        if (effect.scheduler) {
+          effect.scheduler()
+        } else {
+          effect.run()
+        }
+      })
     }
 
     function updateHtml(value) {
@@ -210,11 +220,42 @@
       reactiveState.a += 2
     }
 
+    // ref
+    function ref(val) {
+      return createRef(val)
+    }
+    function createRef(val) {
+      return new Refimpll(val)
+    }
+    function trackRefValue(ref) {
+      console.log('trackRefValue', ref, ref.dep)
+      if (!ref.dep || !ref.dep.length) {
+        console.log('trackRefValue  undefined', ref, ref.dep)
+        ref.dep = createDep()
+      }
+      trackEffect(ref.dep)
+    }
+    class Refimpll {
+      constructor(val) {
+        this.val = val
+        this.dep = createDep()
+      }
+      get value() {
+        // debugger
+        trackEffect(this.dep)
+        return this.val
+      }
+      set value(newVal) {
+        triggerRefValue(this.dep, newVal)
+        this.val = newVal
+      }
+    }
+
     // watch
     function watch(source, cb) {
       let getter = () => source.value
 
-
+      console.log('watch --init', source, cb)
       const scheduler = () => {
         if (cb) {
           const newValue = effect.run()
@@ -235,14 +276,15 @@
       console.log(effect, 'activeEffect', activeEffect)
     }
 
-    watch(count, (...args) => {
+    let refval = ref(1)
+    watch(refval, (...args) => {
       console.log('watch-count', args)
     })
 
     setTimeout(() => {
-      count.value = 10
-      console.log('count.value', count.value)
-    }, 5000)
+      refval.value = 10
+      console.log('refval.value = 10', refval.value)
+    }, 2000)
   </script>
 </body>
 
