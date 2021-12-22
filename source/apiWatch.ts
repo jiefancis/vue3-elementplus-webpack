@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-12-20 13:38:24
  * @LastEditors: wangjie
- * @LastEditTime: 2021-12-20 16:37:16
+ * @LastEditTime: 2021-12-20 18:18:03
  */
 /**
  * create effect => effect.run => get oldValue =>  ref get value => trackRefValue => ref.dep.push(effect)
@@ -22,7 +22,7 @@ export function watch(source, cb) {
     getter = () => source.value
   }
   let oldValue = undefined
-  const job = () => {
+  const scheduler = () => {
     if(cb) {
       let newValue = effect.run()
       cb(newValue, oldValue)
@@ -30,7 +30,7 @@ export function watch(source, cb) {
     }
   }
 
-  const effect = new reactiveEffect(source, job)
+  const effect = new reactiveEffect(source, scheduler)
   if(cb) {
     oldValue = effect.run()
   } else {

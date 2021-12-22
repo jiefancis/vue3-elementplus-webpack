@@ -7,7 +7,8 @@
     "serve": "vue-cli-service serve --mode development",
     "build": "vue-cli-service build --mode production",
     "lint": "vue-cli-service lint",
-    "fix": "eslint --fix --ext .js --ext .jsx --ext .vue src/"
+    "fix": "eslint --fix --ext .js --ext .jsx --ext .vue src/",
+    "commit": "git-cz"
   },
   "dependencies": {
     "@antv/x6": "^1.28.1",
@@ -40,6 +41,7 @@
     "@vue/eslint-config-standard": "^5.1.2",
     "@vue/eslint-config-typescript": "^7.0.0",
     "babel-eslint": "^10.1.0",
+    "commitizen": "^4.2.4",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.20.2",
@@ -58,5 +60,10 @@
     "typescript": "^4.4.3",
     "web-webpack-plugin": "^4.6.7",
     "webpack": "^4.42.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-conventional-changelog"
+    }
   }
 }
