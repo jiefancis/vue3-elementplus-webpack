@@ -13,6 +13,9 @@ import { isFunction } from './computed'
 import { reactiveEffect } from './effect'
 import { isRef } from './shared'
 export function watch(source, cb) {
+  return doWatch(source, cb)
+}
+export function doWatch(source, cb) {
   let getter = null
   if(isFunction(source)) {
     getter = source
@@ -35,5 +38,8 @@ export function watch(source, cb) {
     oldValue = effect.run()
   } else {
     effect.run()
+  }
+  return () => {
+    console.log('stop watch')
   }
 }
