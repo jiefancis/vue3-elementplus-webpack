@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-08-18 18:26:58
  * @LastEditors: wangjie
- * @LastEditTime: 2021-11-23 20:57:12
+ * @LastEditTime: 2021-12-27 09:35:15
  */
 import { createApp } from 'vue'
 import App from './App.vue'
@@ -33,6 +33,7 @@ app.use(store)
 app.use(naive)
 app.mount('#app')
 
+app.config.globalProperties.performance = true
 
 // if(navigator.serviceWorker) {
 //   window.addEventListener('DOMContentLoaded', function(){

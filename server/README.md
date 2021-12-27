@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-12-07 16:35:12
  * @LastEditors: wangjie
- * @LastEditTime: 2021-12-16 10:38:05
+ * @LastEditTime: 2021-12-27 09:57:06
 -->
 
 # server
@@ -60,3 +60,9 @@
 事务和锁都是为了保证数据的一致性，但是 mongoose 里面没有锁
 
 # 分表
+
+# 压测工具 wrk
+
+1、接口 QPS（Query per second 每秒处理完的请求数） 能达到多少呢？
+
+> 安装 https://baijiahao.baidu.com/s?id=1654308540219597866&wfr=spider&for=pc

@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-12-23 16:24:30
  * @LastEditors: wangjie
- * @LastEditTime: 2021-12-23 16:49:31
+ * @LastEditTime: 2021-12-27 11:14:00
  */
 import { createRender } from '../render-core'
 function createElement(type) {
@@ -30,6 +30,7 @@ function remove(child) {
 
 
 let render = null
+// 延迟渲染器，延迟渲染
 function ensureRender() {
   return (render || (render = createRender({
     createElement,

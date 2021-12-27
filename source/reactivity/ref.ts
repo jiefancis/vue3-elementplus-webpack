@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-12-20 15:06:17
  * @LastEditors: wangjie
- * @LastEditTime: 2021-12-20 17:02:15
+ * @LastEditTime: 2021-12-27 16:38:00
  */
 import { createDep } from './dep'
 import { trackEffects, triggerEffects } from './effect'
@@ -40,3 +40,4 @@ export function trackRefValue(ref) {
 export function triggerRefValue(ref,newValue) {
   triggerEffects(ref.dep)
 }
+
