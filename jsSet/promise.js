@@ -19,9 +19,7 @@ function MPromise(execute) {
             if(this.resolveQueue.length) {
                 this.resolveQueue.reduce((p,n) => {
                     curVal = n(curVal)
-                    p.then(res => n(res))
-                    
-
+                    return p.then(res => curVal = n(res))
                 }, MPromise.resolve(curVal))
             }
         }
@@ -49,6 +47,7 @@ MPromise.prototype.then = function(resolve, reject = null) {
     }
     this.resolveQueue.push(resolve)
     reject && this.rejectQueue.add(reject)
+    0
     return this
 }
 MPromise.prototype.catch = function(reject) {

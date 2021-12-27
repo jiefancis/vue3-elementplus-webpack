@@ -6,7 +6,7 @@
  * @LastEditors: wangjie
  * @LastEditTime: 2021-12-27 16:22:23
  */
-
+import { inject } from 'vue'
 import { piniaSymbol } from './createPinia'
 export function defineStore(id, options) {
   const useStore = function(id, options) {
