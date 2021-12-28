@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-12-28 09:03:03
  * @LastEditors: wangjie
- * @LastEditTime: 2021-12-28 14:22:21
+ * @LastEditTime: 2021-12-28 14:54:26
  */
 // vars
 var piniaSymbol = Symbol('pinia')
@@ -73,7 +73,17 @@ function createOptionsStore(id, options, pinia) {
     actions[key] = actions[key].bind(localState)
   })
   const store = assign(localState, actions)
+  mountPatchToStore(store)
+
   pinia._s.set(id, store)
+}
+
+function mountPatchToStore(store) {
+  store.$patch = function(storeOptions) {
+    Object.entries(storeOptions).forEach(([key, value]) => {
+      this[key] = value
+    })
+  }
 }
 
 function assign(source, ...target) {

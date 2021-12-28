@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-12-27 16:16:07
  * @LastEditors: wangjie
- * @LastEditTime: 2021-12-28 14:13:58
+ * @LastEditTime: 2021-12-28 14:26:59
  */
 export const piniaSymbol = Symbol('pinia')
 export function createPinia() {
