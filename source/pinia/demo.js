@@ -1,3 +1,11 @@
+/*
+ * @Descripttion:
+ * @version:
+ * @Author: wangjie
+ * @Date: 2021-12-28 09:03:03
+ * @LastEditors: wangjie
+ * @LastEditTime: 2021-12-28 14:22:21
+ */
 // vars
 var piniaSymbol = Symbol('pinia')
 
@@ -5,14 +13,13 @@ var piniaSymbol = Symbol('pinia')
 var app = {
     provideInstance: {},
     provide(key, value) {
-        app.provideInstance[key] = value 
+        app.provideInstance[key] = value
     },
     inject(key, defaultValue) {
         if(![null, undefined].includes(defaultValue)) {
             return defaultValue
-        } else {
-            return app.provideInstance[key]
         }
+        return app.provideInstance[key]
     },
     use(o) {
         // app.use(createPinia())
@@ -23,9 +30,12 @@ var app = {
 function createPinia() {
     const pinia = {
         install(app) {
-            app.provide(Symbol, pinia)
-            app.$pinia = pinia
-        }
+          app._a = app
+          app.provide(piniaSymbol, pinia)
+          app.$pinia = pinia
+        },
+        _a: null,
+        _s: new Map()
     }
     return pinia
 }
@@ -33,41 +43,41 @@ function createPinia() {
  * const useStore = defineStore(id, options)
  * const store = useStore()
  */
-function reactive(target, key){
+function toReactive(target, key, getter) {
     Object.defineProperty(target, key, {
-        get(target, key) {
-            return typeof target[key] === 'function' ? target[key]() : target[key]
-        }
+      get() {
+        return typeof getter === 'function' ? getter(target) : getter
+      }
     })
 }
 function defineStore(id, options) {
     const { state, getters, actions } = options
     function useStore() {
-        let localState = typeof state === 'function' ? state() : state
-        let retGetter = {}, retAction = {};
-        Object.entries(getters).forEach(([prop, fn]) => {
-            retGetter[prop] = fn.bind(localState)()
-        })
-        Object.entries(actions).forEach(([prop, fn]) => {
-            let ret = fn.bind(localState)
-            retAction[prop] = function(newVal) {
-                localState.state = newVal
-                ret(newVal)
-            }
-        })
-        const store = assign(
-            localState,
-            retGetter,
-            retAction
-        )
-        return store
+      const pinia = app.inject(piniaSymbol)
+      createOptionsStore(id, options, pinia)
+      const store = pinia._s.get(id)
+      return store
     }
     useStore.$id = id
     return useStore
 }
+function createOptionsStore(id, options, pinia) {
+  const { state, getters, actions } = options
+  const localState = typeof state === 'function' ? state() : state
+  // actions set this is localState
+  Object.entries(getters).forEach(([key, fn]) => {
+    localState[key] = fn
+    toReactive(localState, key, fn)
+  })
+  Object.keys(actions).forEach(key => {
+    actions[key] = actions[key].bind(localState)
+  })
+  const store = assign(localState, actions)
+  pinia._s.set(id, store)
+}
 
 function assign(source, ...target) {
-    return Object.assign(source, ...target)
+  return Object.assign(source, ...target)
 }
 
 
@@ -79,14 +89,15 @@ var useStore = defineStore('car', {
     getters: {
         getStone(state) {
             return state.stone
-        } 
+        }
     },
     actions: {
         setStone(newVal) {
-            this.stone = newVal
+          this.stone = newVal
         }
     }
 })
 var store = useStore()
 store.getStone
-
+store.setStone(100)
+console.log(1111111, store.getStone)

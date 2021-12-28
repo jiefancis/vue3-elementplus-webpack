@@ -4,14 +4,16 @@
  * @Author: wangjie
  * @Date: 2021-12-27 16:18:10
  * @LastEditors: wangjie
- * @LastEditTime: 2021-12-27 16:22:23
+ * @LastEditTime: 2021-12-28 14:14:35
  */
 import { inject } from 'vue'
 import { piniaSymbol } from './createPinia'
 export function defineStore(id, options) {
-  const useStore = function(id, options) {
-    const pinie = inject(piniaSymbol)
-    return createOptionsStore(id, options, pinia)
+  const useStore = function() {
+    const pinia = inject(piniaSymbol) as any
+    createOptionsStore(id, options, pinia)
+    const store = pinia._s.get(id)
+    return store
   }
   useStore.$id = id
   return useStore
