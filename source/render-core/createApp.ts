@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-12-23 16:52:29
  * @LastEditors: wangjie
- * @LastEditTime: 2021-12-23 17:03:46
+ * @LastEditTime: 2021-12-29 14:53:53
  */
 import { createVNode } from './vnode'
 export function createAppAPI(render) {
@@ -16,5 +16,6 @@ export function createAppAPI(render) {
         render(vnode, rootContainer)
       }
     }
+    return app
   }
 }

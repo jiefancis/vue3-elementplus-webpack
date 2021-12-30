@@ -1,3 +1,11 @@
+/*
+ * @Descripttion:
+ * @version:
+ * @Author: wangjie
+ * @Date: 2021-12-27 09:24:22
+ * @LastEditors: wangjie
+ * @LastEditTime: 2021-12-29 14:51:03
+ */
 
 var PENDING = 'pending'
 var FULLFILLED = 'fullfilled'
@@ -24,7 +32,7 @@ function MPromise(execute) {
             }
         }
     }
-    
+
     const reject = reason => {
         if(this.state === PENDING) {
             this.state = REJECTED
@@ -47,7 +55,6 @@ MPromise.prototype.then = function(resolve, reject = null) {
     }
     this.resolveQueue.push(resolve)
     reject && this.rejectQueue.add(reject)
-    0
     return this
 }
 MPromise.prototype.catch = function(reject) {
@@ -74,7 +81,7 @@ MPromise.resolve = function(val) {
 var p = new MPromise((resolve, reject) => {
     console.log('new MPromise')
     setTimeout( () => resolve('resolve'), 2000)
-    
+
 })
 p.then(res => {
     console.log('then ', res)

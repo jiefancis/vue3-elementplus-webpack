@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-08-18 18:26:58
  * @LastEditors: wangjie
- * @LastEditTime: 2021-10-28 15:28:53
+ * @LastEditTime: 2021-12-29 18:04:53
 -->
 <template>
 <router-view v-slot="{ Component }">

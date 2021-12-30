@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-08-18 18:26:58
  * @LastEditors: wangjie
- * @LastEditTime: 2021-12-27 09:35:15
+ * @LastEditTime: 2021-12-30 09:31:55
  */
 import { createApp } from 'vue'
 import App from './App.vue'
@@ -82,3 +82,21 @@ app.config.globalProperties.performance = true
 // registerMicroApps(microapps)
 // // 启动 qiankun
 // start()
+
+var o = {
+  a: 1,
+  b: {
+    c: '2'
+  }
+}
+type typeO = typeof o
+var O: typeO = {
+  a: '1',
+  b: 2
+}
+
+type p = Partial<typeO>
+function getVal<T, P extends keyof T>(obj: T, key: P): T[P] {
+  return obj[key]
+}
+getVal(o, 'c')
