@@ -7,12 +7,14 @@
     "declarations": true
   },
   "dependencies": {
+    "cheerio": "^1.0.0-rc.10",
     "egg": "^2.15.1",
     "egg-cors": "^2.2.3",
     "egg-scripts": "^2.11.0",
     "egg-sequelize": "^6.0.0",
     "jsonwebtoken": "^8.5.1",
-    "mysql2": "^2.3.3"
+    "mysql2": "^2.3.3",
+    "node-fetch": "^3.1.0"
   },
   "devDependencies": {
     "autod": "^3.0.1",

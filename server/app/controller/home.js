@@ -4,33 +4,131 @@
  * @Author: wangjie
  * @Date: 2021-12-07 16:35:12
  * @LastEditors: wangjie
- * @LastEditTime: 2021-12-08 19:56:00
+ * @LastEditTime: 2021-12-31 11:51:52
  */
 'use strict';
 const crypto = require('crypto')
+const https = require('https')
 const jwt = require('jsonwebtoken')
 const Controller = require('egg').Controller;
 const fs = require('fs')
 const path = require('path')
-
+const cheerio = require('cheerio')
+// const fetch = require('node-fetch')
 class HomeController extends Controller {
+  // 号外：如果做网站监控，可以监听网站数据是否被篡改或网站是否正常运行，若出现异常则发送短信给开发人员提醒。
   async index() {
-    const { ctx } = this;
-    let reqToken = ctx.cookies.get('token')
+    // const { ctx } = this
+    // const response = await ctx.curl('https://blog.csdn.net/qq_39905409/article/details/110694093');
 
-    console.log(ctx.session,'ctx.verify', ctx.session.userId === reqToken)
-    let md5 = crypto.createHash("md5").update('123456').digest('hex')
-    let decode = crypto.createHash('md5').update(md5).digest('hex')
-    let token = jwt.sign({id: 1}, '123456')
-    ctx.cookies.set('token', token)
-    ctx.session.userId = token
-    ctx.body = {
-      // data: {
-      //   md5,decode
-      // },
-      // token,
-      session: ctx.session
+    // const pageXml = response.data.toString()
+    // const $ = cheerio.load(pageXml, { decodeEntities: false})
+    // // console.log('pageXmlpageXml', pageXml, 123456, $)
+    // var result = ''
+    // $('div').each(function() {
+    //   var text = $(this).html()
+    //   // console.log('cheerio', text)
+    //   result += text
+    // })
+    // // console.log(fecth, 'fetch', await import('node-fetch'))
+    // // ctx.body = await import('node-fetch')
+    // ctx.body = {
+    //   data: result,
+    //   response
+    // }
+
+
+    // save  txt
+    var html = ''
+    var temp = ''
+    var arr = []
+    var num = 0
+    var baseUrl = 'http://127.0.0.1:7001'
+
+    function findUrl(html){
+        var $ = cheerio.load(html)
+        var href_url_a = $('html').find('a')
+
+        for (var i = 0; i < href_url_a.length; i++) {
+            if ($(href_url_a[i]).attr('href') == '' || $(href_url_a[i]).attr('href') == null) {
+            }else{
+                if ($(href_url_a[i-1]).attr('href') == $(href_url_a[i]).attr('href')) {
+
+                }
+                else{
+                    var Str = $(href_url_a[i]).attr('href')
+                    if (Str.substring(0,4) == 'http') {
+                        arr.push($(href_url_a[i]).attr('href'))
+                        temp += $(href_url_a[i]).attr('href')+'\n'
+                        num++
+                    }
+                }
+            }
+        }
+        fs.writeFile('url.txt','【抓取到<'+baseUrl+'>页面数： '+num+' 个】：'+'\n'+'\n'+temp,function(err){
+            if (err)
+                throw err
+        })
+        console.log('\n'+'||这个页面一共有'+num+'链接.')
     }
+
+    (function web_crawler(url){
+        if (url.substring(0,5) == 'https') {
+            https.get(url,function(res){
+                res.on('data',function(chunk){
+                    html += chunk
+                    console.log('正在爬取...',chunk)
+                })
+                res.on('end',function(){
+                    findUrl(html)
+                    console.log('抓取完毕！')
+                }).on('error',function(e){
+                    console.log('错误访问...')
+                })
+            })
+        }else{
+            https.get(url,function(res){
+                res.on('data',function(chunk){
+                    html += chunk
+                    console.log('正在爬取...')
+                })
+                res.on('end',function(){
+                    console.log('抓取完毕！')
+                    findUrl(html)
+                }).on('error',function(e){
+                    console.log('错误访问...')
+                })
+            })
+        }
+    })(baseUrl)
+
+    // save txt end
+
+
+
+    // (async () => {
+    //   const response = await fetch('https://www.baidu.com');
+    //   const body = await response.text();
+    //   ctx.body = {
+    //     data: body
+    //   }
+    // })();
+    // const { ctx } = this;
+    // let reqToken = ctx.cookies.get('token')
+
+    // console.log(ctx.session,'ctx.verify', ctx.session.userId === reqToken)
+    // let md5 = crypto.createHash("md5").update('123456').digest('hex')
+    // let decode = crypto.createHash('md5').update(md5).digest('hex')
+    // let token = jwt.sign({id: 1}, '123456')
+    // ctx.cookies.set('token', token)
+    // ctx.session.userId = token
+    // ctx.body = {
+    //   // data: {
+    //   //   md5,decode
+    //   // },
+    //   // token,
+    //   session: ctx.session
+    // }
 
   }
   async upload() {

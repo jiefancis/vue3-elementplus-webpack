@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-08-18 18:26:58
  * @LastEditors: wangjie
- * @LastEditTime: 2021-12-30 09:31:55
+ * @LastEditTime: 2021-12-31 16:52:52
  */
 import { createApp } from 'vue'
 import App from './App.vue'
@@ -100,3 +100,73 @@ function getVal<T, P extends keyof T>(obj: T, key: P): T[P] {
   return obj[key]
 }
 getVal(o, 'c')
+
+
+// wcs demo
+// 一个拐角，两条路线
+// [7,4] --> [4,4] --> [4,9]
+
+// [7,4] --> [7,9] --> [4,9]
+
+var list = [
+  [0,0,0,1],
+  [0,0,0,2],
+  [0,0,0,3],
+  [0,0,0,4,5,6,7,8,9],
+  [0,0,0,5],
+  [0,0,0,6],
+  [0,0,0,7],
+  [],
+  [],
+  []
+]
+
+
+function ensurePath(p1, p2) {
+  let xPath = [], yPath = [];
+  if(p1[0] === p2[0]) {
+    let x1 = p1[1], x2 = p2[1],y = p1[0], gt =x1, lt = x2;
+    if(x1 < x2) {
+      gt = x2
+      lt = x1
+    }
+    let dx = gt - lt, point = null
+    while(dx) {
+      point = list[lt+dx][y]
+      if(![0, null, undefined].includes(point)) {
+        xPath.push(point)
+      }
+      dx--
+    }
+
+  } else if(p1[1] === p2[1]) {
+      let y1 = p1[0], y2 = p2[0], x = p1[1], gt = p1[0], lt = p2[0];
+      if(y1 < y2) {
+        gt = y2
+        lt = y1
+      }
+      let dx = gt - lt, point = null
+      while(dx) {
+        point = list[x][lt+dx]
+        if(![0, null, undefined].includes(point)) {
+          yPath.push(point)
+        }
+        dx--
+      }
+    }
+    return [xPath, yPath]
+}
+var p1 = [6,3] ,p2 = [3,], list = [
+  [0,0,0,1],
+  [0,0,0,2],
+  [0,0,0,3],
+  [0,0,0,4,5,6,7,8,9],
+  [0,0,0,5],
+  [0,0,0,6],
+  [0,0,0,7],
+  [],
+  [],
+  []
+]
+ensurePath([6,3], [3,3])
+ensurePath([3,3], [3,8])

@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-12-27 13:58:19
  * @LastEditors: wangjie
- * @LastEditTime: 2021-12-27 14:53:58
+ * @LastEditTime: 2021-12-30 18:00:06
  */
 import { uploadParams, Navigator } from '../../types/promise'
 export function capturePromise() {
@@ -13,9 +13,8 @@ export function capturePromise() {
 }
 
 export function onUnhandledrejection(event) {
-  console.log('onUnhandledrejection', event)
   let uploadData = formatParams(event)
-
+  console.log(uploadData, 'onUnhandledrejection', event)
 }
 export function onRejectionHandled(event) {
   console.log('onRejectionHandled', event)

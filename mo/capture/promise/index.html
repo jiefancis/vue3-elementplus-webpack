@@ -4,39 +4,66 @@
  * @Author: wangjie
  * @Date: 2021-12-27 14:07:58
  * @LastEditors: wangjie
- * @LastEditTime: 2021-12-27 14:41:41
+ * @LastEditTime: 2021-12-30 18:38:19
 -->
 <html>
 
 <head>
   <title>111</title>
 </head>
-<script type="module">
-  window.addEventListener("unhandledrejection", onUNhandledrejection)
-  function onUNhandledrejection(event) {
-    console.log(`1111111111111: ${event.reason}`, event, formatParams(event));
 
-  }
-  function formatParams(event) {
-    let params = {}
-    params.message = event.reason?.message
-    params.stack = event.reason?.stack
+<body>
 
-    let [lineNo, columnNo] = getLineAndColumn(event.reason.stack)
-    params.lineNo = lineNo
-    params.columnNo = columnNo
-    return params
-  }
+  <img src="https://www.baidu.com/1.png" />
+  <script type="module">
+    window.addEventListener("unhandledrejection", onUNhandledrejection)
+    function onUNhandledrejection(event) {
+      console.log(`1111111111111: ${event.reason}`, event, formatParams(event));
 
-  function getLineAndColumn(message) {
+    }
+    function formatParams(event) {
+      let params = {}
+      params.message = event.reason?.message
+      params.stack = event.reason?.stack
 
-    let list = message.split('\n')[1]?.split(':')
-    let len = list.length - 1
-    return [list[len - 1], list[len]]
-  }
-  new Promise((resolve, reject) => {
-    a
-  })
-</script>
+      let [lineNo, columnNo] = getLineAndColumn(event.reason.stack)
+      params.lineNo = lineNo
+      params.columnNo = columnNo
+      return params
+    }
+
+    function getLineAndColumn(message) {
+
+      let list = message.split('\n')[1]?.split(':')
+      let len = list.length - 1
+      return [list[len - 1], list[len]]
+    }
+    new Promise((resolve, reject) => {
+      a
+    })
+
+    window.addEventListener('error', catchErrorEvent, true)
+    function catchErrorEvent(e) {
+      const {
+        baseURI,
+        currentSrc,
+        nodeName,
+        outerHTML,
+        tagName
+      } = e.target
+
+      const uploadData = {
+        type: e.type,
+        baseURI,
+        currentSrc,
+        nodeName,
+        outerHTML,
+        tagName
+      }
+
+      console.log(uploadData, 'eeeee', e)
+    }
+  </script>
+</body>
 
 </html>
