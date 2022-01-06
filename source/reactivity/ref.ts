@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-12-20 15:06:17
  * @LastEditors: wangjie
- * @LastEditTime: 2021-12-28 15:50:11
+ * @LastEditTime: 2022-01-06 10:07:49
  */
 import { createDep } from './dep'
 import { trackEffects, triggerEffects } from './effect'
@@ -12,12 +12,12 @@ export function ref(val) {
   return createRef(val)
 }
 export function createRef(val) {
-  return new Refimpl(val)
+  return isRef(val) ? val : new Refimpl(val)
 }
-
 export class Refimpl {
-  dep: any[]
+  dep: any[] = []
   _value: any
+  __v_isRef: boolean = true
   constructor(val) {
     this._value = val
   }
@@ -41,14 +41,23 @@ export function triggerRefValue(ref,newValue) {
   triggerEffects(ref.dep)
 }
 
-
-
+// reactive创建的proxy响应式对象解构仍保持响应式
+export function toRefs(object) {
+  const ret = Array.isArray(object) ? new Array(object.length) : {}
+  for(const key in object) {
+    ret[key] = toRef(object, key)
+  }
+  return ret
+}
+// impl实现类，实现接口
 class ObjectRefImpl{
   _object: Record<string, any>
   _key: string
+  __v_isRef: boolean
   constructor(object, key) {
     this._object = object
     this._key = key
+    this.__v_isRef = true
   }
   get value() {
     return this._object[this._key]
@@ -64,5 +73,12 @@ class ObjectRefImpl{
  * @returns
  */
 export function toRef(object, key) {
-  return new ObjectRefImpl(object, key)
+  const val = object[key]
+  return isRef(val) ? val : new ObjectRefImpl(object, key)
+}
+export function isRef(val) {
+  return val && val.__v_isRef
+}
+export function unRef(val) {
+  return isRef(val) ? val.value : val
 }

@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-08-18 18:26:58
  * @LastEditors: wangjie
- * @LastEditTime: 2021-12-29 18:04:53
+ * @LastEditTime: 2022-01-06 11:22:21
 -->
 <template>
 <router-view v-slot="{ Component }">
@@ -19,13 +19,25 @@
 
 <script lang="ts">
 import axios from 'axios'
-import { defineComponent } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 export default defineComponent({
   setup() {
     (window as any).appppppppppppppppppppp2 = 'appp2'
     const router = useRouter()
 
+    const refv = ref(1)
+    const ret = computed(() => { console.log('computed ---- refv.value', refv.value); return refv.value })
+
+    setTimeout(() => {
+      refv.value = 10
+      console.log('setTimeoutsetTimeout',ret.value)
+    }, 2000)
+
+    setTimeout(() => {
+      refv.value = 100
+      console.log('setTimeoutsetTimeout',ret.value)
+    }, 5000)
     // setTimeout(() => {
     //   router.push('page_pollingSign_reportDetail_reportDetail')
     // },10000)

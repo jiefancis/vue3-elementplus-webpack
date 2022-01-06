@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-12-15 15:49:23
  * @LastEditors: wangjie
- * @LastEditTime: 2021-12-20 17:07:32
+ * @LastEditTime: 2022-01-06 13:43:51
  */
 // import
 import { createDep } from './dep'
@@ -41,7 +41,11 @@ export function track(target, key) {
   trackEffects(deps)
 }
 export function trackEffects(deps) {
-  deps.add(activeEffect)
+  let shouldTrack = false;
+  shouldTrack = !deps.has(activeEffect!)
+  if(shouldTrack) {
+    deps.add(activeEffect)
+  }
 }
 
 export function trigger(target, key, value) {
