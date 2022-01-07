@@ -4,7 +4,7 @@
  * @Author: wangjie
  * @Date: 2021-12-15 16:07:59
  * @LastEditors: wangjie
- * @LastEditTime: 2021-12-20 18:08:14
+ * @LastEditTime: 2022-01-07 15:14:54
 -->
 <html>
 
@@ -285,6 +285,68 @@
       refval.value = 10
       console.log('refval.value = 10', refval.value)
     }, 2000)
+
+
+    // render
+    let render = null
+    const renderOptions = {}
+    function createApp(...args) {
+      return ensureRender().createApp(...args)
+    }
+    function ensureRender() {
+      return render || (render = createRender(renderOptions))
+    }
+    function createRender(options) {
+      const render = (root, container) => {
+
+      }
+      return {
+        render,
+        createApp: createAppAPI(render)
+      }
+    }
+
+    function createContext() {
+      const context = {
+        app: null,
+        config: {
+          errorHandler: null
+        },
+        provides: {},
+        components: {}
+      }
+      return context
+    }
+
+    // closure cache render function which dispatch on the time
+    function createAppAPI(render) {
+      return function createApp(rootComponent) {
+
+        const context = createContext()
+
+        const app = {
+          get config() {
+            return context.config
+          },
+          directive(name, directive) {
+            context.directive[name] = directive
+          },
+          use(plugin, options?: any) {
+            plugin.install(app, options)
+          },
+          provides(key, value) {
+            context.provide[key] = value
+          },
+          mount() {
+            render()
+          },
+          component(name, component) {
+            context.components[name] = component
+          }
+        }
+        return app
+      }
+    }
   </script>
 </body>
 

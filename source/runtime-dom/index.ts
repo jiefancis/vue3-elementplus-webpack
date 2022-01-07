@@ -4,42 +4,18 @@
  * @Author: wangjie
  * @Date: 2021-12-23 16:24:30
  * @LastEditors: wangjie
- * @LastEditTime: 2021-12-27 11:14:00
+ * @LastEditTime: 2022-01-07 11:11:59
  */
 import { createRender } from '../render-core'
-function createElement(type) {
-  return document.createElement(type)
-}
-function createText(text) {
-  return document.createTextNode(text)
-}
-function setText(node, text) {
-  node.nodeValue = text
-}
-function setElementText(el, text) {
-  el.textContent = text
-}
-
-function insert(child, parent, anchor = null) {
-  parent.insertBefore(child, anchor)
-}
-function remove(child) {
-  let parent = child.parentNode
-  parent && parent.removeChild(child)
-}
+import * as  nodeOps from './nodeOps'
+import { extend } from '../shared'
 
 
 let render = null
+const renderOptions = extend({}, nodeOps)
 // 延迟渲染器，延迟渲染
 function ensureRender() {
-  return (render || (render = createRender({
-    createElement,
-    createText,
-    setText,
-    setElementText,
-    insert,
-    remove
-  })))
+  return (render || (render = createRender(renderOptions)))
 }
 export function createApp(root) {
   return ensureRender().createAapp(root)
